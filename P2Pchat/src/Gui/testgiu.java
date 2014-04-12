@@ -6,26 +6,51 @@
 
 package Gui;
 
+import Core.InputServer;
+import Core.OutputHandler;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
 /**
  *
  * @author Other
  */
 public class testgiu extends javax.swing.JFrame {
+    
+    
+    GuiUpdater updater;
+    InputServer inputserver;
+    
+    
 
     /**
      * Creates new form testgiu
      */
     public testgiu() {
         initComponents();
+        updater = new GuiUpdater();
+        inputserver = new InputServer(8080,updater);
+        
+        
+        
+        updater.addPropertyChangeListener(new PropertyChangeListener() {
+
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                
+                String message  = (String)evt.getNewValue();
+                intext.setText(intext.getText()+"\n"+message);
+                
+            }
+        });
+        
+        
+        
+        
+        
     }
     
-    public static synchronized void updateGUI(String msg){
-        
-        
-        
-        //Server handler will call this method to update  the gui
-        
-    }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -37,23 +62,33 @@ public class testgiu extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jTextField1 = new javax.swing.JTextField();
-        jToggleButton1 = new javax.swing.JToggleButton();
-        jButton1 = new javax.swing.JButton();
+        sendtext = new javax.swing.JTextField();
+        Switch = new javax.swing.JToggleButton();
+        sendbutton = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        intext = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTextField1.setText("jTextField1");
+        sendtext.setText("jTextField1");
 
-        jToggleButton1.setText("On/Off");
+        Switch.setText("On");
+        Switch.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                SwitchMouseClicked(evt);
+            }
+        });
 
-        jButton1.setText("Send");
+        sendbutton.setText("Send");
+        sendbutton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                sendbuttonMouseClicked(evt);
+            }
+        });
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        intext.setColumns(20);
+        intext.setRows(5);
+        jScrollPane1.setViewportView(intext);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -64,11 +99,11 @@ public class testgiu extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(sendtext, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 177, Short.MAX_VALUE)
-                        .addComponent(jToggleButton1)))
+                        .addComponent(sendbutton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 196, Short.MAX_VALUE)
+                        .addComponent(Switch)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -76,10 +111,10 @@ public class testgiu extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jToggleButton1)
+                    .addComponent(Switch)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jButton1)))
+                        .addComponent(sendtext, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(sendbutton)))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE)
                 .addContainerGap())
@@ -98,6 +133,26 @@ public class testgiu extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void sendbuttonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_sendbuttonMouseClicked
+        // TODO add your handling code here:
+        
+        String message = sendtext.getText();
+        OutputHandler handler = new OutputHandler();
+        handler.sendMessage(message);
+        
+    }//GEN-LAST:event_sendbuttonMouseClicked
+
+    private void SwitchMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SwitchMouseClicked
+        // TODO add your handling code here:
+        if(Switch.isSelected()){
+            
+            //InputServer inputserver = new InputServer(8080);
+            Thread inputserverthread = new Thread(inputserver);
+            inputserverthread.start();
+        }
+        
+    }//GEN-LAST:event_SwitchMouseClicked
 
     /**
      * @param args the command line arguments
@@ -135,11 +190,11 @@ public class testgiu extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JToggleButton Switch;
+    private javax.swing.JTextArea intext;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JToggleButton jToggleButton1;
+    private javax.swing.JButton sendbutton;
+    private javax.swing.JTextField sendtext;
     // End of variables declaration//GEN-END:variables
 }

@@ -6,47 +6,43 @@
 
 package Core;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundHandlerAdapter;
-import javax.swing.SwingWorker;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 
 /**
  *
  * @author Other
  */
-
-//server side
-public class OutputHandler extends ChannelInboundHandlerAdapter{
-    
-    Gui.GuiUpdater updater;
+public class OutputHandler {
     
     
+    //run it under a swing worker
+   
     
-    @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg) { // (2)
-        // Discard the received data silently.
-        ByteBuf in  = (ByteBuf)msg;
+     public void sendMessage(String message){
+            
         
-        String message = in.toString(io.netty.util.CharsetUtil.US_ASCII);
-        
-        
-        //convert message
-        updater.updategui(null);
-        //wrute to gui
-        
-
+         try {
+             
+             Socket s = new Socket ("localhost",8080);
+             OutputStream out = s.getOutputStream();
+             out.write(message.getBytes());
+             out.close();
+             s.close();
+             
+             
+             
+         } catch (IOException ex) {
+             Logger.getLogger(OutputHandler.class.getName()).log(Level.SEVERE, null, ex);
+         }
         
         
     }
     
     
-
-    @Override
-    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) { // (4)
-        // Close the connection when an exception is raised.
-        cause.printStackTrace();
-        ctx.close();
-    }
     
 }

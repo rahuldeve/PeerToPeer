@@ -7,6 +7,7 @@
 package Gui;
 
 import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import javax.swing.SwingWorker;
 import javax.swing.event.SwingPropertyChangeSupport;
 
@@ -16,7 +17,7 @@ import javax.swing.event.SwingPropertyChangeSupport;
  */
 
 
-public class GuiUpdater  {
+public class GuiUpdater implements Runnable  {
     
     private SwingPropertyChangeSupport pChange = new SwingPropertyChangeSupport(this);
     public static final String MESSAGE = "1";
@@ -28,6 +29,22 @@ public class GuiUpdater  {
         old = "asdf";
         
         pChange.firePropertyChange(MESSAGE,old , msg);
+        
+    }
+    
+    public void addPropertyChangeListener (PropertyChangeListener listener){
+            pChange.addPropertyChangeListener(MESSAGE, listener);
+        }
+    
+    
+    public void removePropertyChangeListener(PropertyChangeListener listener){
+            pChange.removePropertyChangeListener(MESSAGE, listener);
+        }
+
+    @Override
+    public void run() {
+        
+        
         
     }
 
