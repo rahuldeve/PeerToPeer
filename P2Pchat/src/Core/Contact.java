@@ -36,6 +36,8 @@ public class Contact {
     @XmlAttribute
     public String getName(){
         return this.name;
+        
+        
     }
     
     @XmlElement
