@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package Core;
+package Communicate;
 
 import Gui.GuiUpdater;
 import io.netty.buffer.ByteBuf;
@@ -33,6 +33,9 @@ public class InputHandler extends ChannelInboundHandlerAdapter{
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) { // (2)
         // Discard the received data silently.
+        
+        
+        //TODO: use a replaying decoder
         ByteBuf in  = (ByteBuf)msg;
         
         String message = in.toString(io.netty.util.CharsetUtil.US_ASCII);

@@ -6,8 +6,8 @@
 
 package Gui;
 
-import Core.InputServer;
-import Core.OutputHandler;
+import Communicate.InputServer;
+import Communicate.OutputHandler;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 

@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package Core;
+package Communicate;
 
 import Gui.GuiUpdater;
 import io.netty.bootstrap.ServerBootstrap;

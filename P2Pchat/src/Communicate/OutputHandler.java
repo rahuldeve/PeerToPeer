@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Core;
+package Communicate;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -21,6 +21,9 @@ public class OutputHandler {
     public void sendMessage(String message) {
 
         try {
+            
+            
+            //TODO: use netty for sending data and use an encoder for encoding the messagee
 
             Socket s = new Socket("localhost", 8080);
             OutputStream out = s.getOutputStream();

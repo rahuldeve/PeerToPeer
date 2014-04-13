@@ -4,8 +4,9 @@
  * and open the template in the editor.
  */
 
-package Core;
+package Advertise;
 
+import Advertise.Contact;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -40,7 +41,7 @@ public class ContactResolve implements Runnable {
     }
     
     
-    
+    //TODO: try advertisments?
     public void resolveContact(Contact contact){    //updater method
   
         //checks if contact already exists
