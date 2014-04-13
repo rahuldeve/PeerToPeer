@@ -34,7 +34,7 @@ public class ContactResolve implements Runnable {
     
     public ContactResolve(){
         
-        self = new Contact("asd", "192.168.1.2");
+        self = new Contact("asd", "192.168.1.2");   //get from gui
         List contacts = new ArrayList<Contact>();
         
     }
@@ -236,7 +236,7 @@ public class ContactResolve implements Runnable {
             //thread for sending updated
             
             
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            
         } catch (IOException ex) {
             Logger.getLogger(ContactResolve.class.getName()).log(Level.SEVERE, null, ex);
         } catch (JAXBException ex) {

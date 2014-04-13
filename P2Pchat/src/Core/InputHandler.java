@@ -39,7 +39,7 @@ public class InputHandler extends ChannelInboundHandlerAdapter{
         
         
         //convert message
-        updater.updategui("jggf");
+        updater.updategui(message);
         //System.out.println(message);
         //wrute to gui
         

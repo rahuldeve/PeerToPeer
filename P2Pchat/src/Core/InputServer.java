@@ -26,11 +26,14 @@ import java.util.logging.Logger;
 //Activates the input netty server fot accepting incoming mmessages
 
 
-public class InputServer implements Runnable {
+public class InputServer implements Runnable{
     
     private int port;
     
     public InputHandler handler;
+    
+    EventLoopGroup bossGroup;
+    EventLoopGroup workerGroup;
 
     public InputServer(int port, GuiUpdater updater) {
         this.port = port;
@@ -40,21 +43,21 @@ public class InputServer implements Runnable {
     @Override
     public void run() {
         
-        EventLoopGroup bossGroup = new NioEventLoopGroup(); // (1)
-        EventLoopGroup workerGroup = new NioEventLoopGroup();
+        bossGroup = new NioEventLoopGroup(); 
+        workerGroup = new NioEventLoopGroup();
         
         
-        ServerBootstrap b = new ServerBootstrap(); // (2)
+        ServerBootstrap b = new ServerBootstrap(); 
             b.group(bossGroup, workerGroup)
-             .channel(NioServerSocketChannel.class) // (3)
-             .childHandler(new ChannelInitializer<SocketChannel>() { // (4)
+             .channel(NioServerSocketChannel.class) 
+             .childHandler(new ChannelInitializer<SocketChannel>() { 
                  @Override
                  public void initChannel(SocketChannel ch) throws Exception {
                      ch.pipeline().addLast(handler);
                  }
              })
-             .option(ChannelOption.SO_BACKLOG, 128)          // (5)
-             .childOption(ChannelOption.SO_KEEPALIVE, true); // (6)
+             .option(ChannelOption.SO_BACKLOG, 128)          
+             .childOption(ChannelOption.SO_KEEPALIVE, true); 
             
             
             ChannelFuture f; 
@@ -62,16 +65,19 @@ public class InputServer implements Runnable {
             
         try {
             
-            f = b.bind(port).sync(); // (7)
+            f = b.bind(port).sync(); 
             f.channel().closeFuture().sync();
+            
             
         } catch (InterruptedException ex) {
             Logger.getLogger(InputServer.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         finally {
+            
             workerGroup.shutdownGracefully();
             bossGroup.shutdownGracefully();
+            
         }
 
             // Wait until the server socket is closed.
@@ -80,6 +86,12 @@ public class InputServer implements Runnable {
             
         
         
+    }
+    
+    public void shutdown(){
+        
+        workerGroup.shutdownGracefully();
+        bossGroup.shutdownGracefully();
     }
     
 }

@@ -17,7 +17,7 @@ import javax.swing.event.SwingPropertyChangeSupport;
  */
 
 
-public class GuiUpdater implements Runnable  {
+public class GuiUpdater   {
     
     private SwingPropertyChangeSupport pChange = new SwingPropertyChangeSupport(this);
     public static final String MESSAGE = "1";
@@ -41,12 +41,7 @@ public class GuiUpdater implements Runnable  {
             pChange.removePropertyChangeListener(MESSAGE, listener);
         }
 
-    @Override
-    public void run() {
-        
-        
-        
-    }
+ 
 
 
     
