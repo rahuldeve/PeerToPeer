@@ -7,12 +7,15 @@
 package Advertise;
 
 import Gui.GuiUpdater;
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.StaxDriver;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
@@ -115,15 +118,22 @@ public class ContactResolve implements Runnable {
             //keep 6666 as port for resolving?
             InputStream reader = s.getInputStream();
             
-            JAXBContext jaxbContext = JAXBContext.newInstance(Contact.class);
+            XStream xs = new XStream(new StaxDriver());
             
+            
+            System.out.println(reader.available());
             if(reader.available()!=0){
                 
-                Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-                Contact contact = (Contact) jaxbUnmarshaller.unmarshal(reader);
+                
+                byte b[] = null;
+                reader.read(b);
+                
+                String xml = new String(b);
+                System.out.println(xml);
+                        
                 
                 System.out.println("resolving");
-                resolveContact(contact);
+               // resolveContact(contact);
                 
                 reader.close();
                 s.close();
@@ -139,8 +149,6 @@ public class ContactResolve implements Runnable {
             
         } catch (IOException ex) {
             Logger.getLogger(ContactResolve.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (JAXBException ex) {
-            Logger.getLogger(ContactResolve.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
@@ -150,6 +158,8 @@ public class ContactResolve implements Runnable {
         
         ServerSocket ss = new ServerSocket(6666);
         
+        // use XSTREAM
+        
         //thrread?
         while(true)
         {
@@ -157,15 +167,13 @@ public class ContactResolve implements Runnable {
             Socket s=ss.accept();
             
             OutputStream writer = s.getOutputStream();
-            JAXBContext jaxbContext = JAXBContext.newInstance(Contact.class);
-            Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
             
-            jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-            jaxbMarshaller.marshal(this.self, writer);
+            XStream xs = new XStream(new StaxDriver());
             
-         
+            String xml = xs.toXML(this.self);
+            System.out.println(xml);
             
-            
+            writer.write(xml.getBytes());
             writer.close();
             s.close();
             
@@ -260,13 +268,7 @@ public class ContactResolve implements Runnable {
         
         try {
             
-            this.sendDetails();
-            
-            
-            //thread for sending details
-            //thread for updating 
-            //thread for sending updated
-            
+            sendDetails();
             
             
         } catch (IOException ex) {
