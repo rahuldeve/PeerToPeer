@@ -6,9 +6,7 @@
 
 package Gui;
 
-import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import javax.swing.SwingWorker;
 import javax.swing.event.SwingPropertyChangeSupport;
 
 /**
@@ -23,11 +21,11 @@ public class GuiUpdater   {
     public static final String MESSAGE = "1";
     
     
-    public void updategui(String msg){
+    public void updategui(Object msg){
         
         String old;
         old = "asdf";
-        
+        System.out.println("updating gui");
         pChange.firePropertyChange(MESSAGE,old , msg);
         
     }

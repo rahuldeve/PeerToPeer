@@ -2,14 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/C:/Users/Other/Documents/GitHub/PeerToPeer/P2Pchat/src/Core/InputServer.java</file>
-            <file>file:/C:/Users/Other/Documents/GitHub/PeerToPeer/P2Pchat/src/Gui/testgiu.java</file>
-            <file>file:/C:/Users/Other/Documents/GitHub/PeerToPeer/P2Pchat/src/Core/OutputHandler.java</file>
-            <file>file:/C:/Users/Other/Documents/GitHub/PeerToPeer/P2Pchat/src/Core/ServiceDiscovery.java</file>
-            <file>file:/C:/Users/Other/Documents/GitHub/PeerToPeer/P2Pchat/src/Core/Contact.java</file>
-            <file>file:/C:/Users/Other/Documents/GitHub/PeerToPeer/P2Pchat/src/Core/ContactResolve.java</file>
-            <file>file:/C:/Users/Other/Documents/GitHub/PeerToPeer/P2Pchat/src/Core/InputHandler.java</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>

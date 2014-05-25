@@ -6,7 +6,7 @@
 
 package Advertise;
 
-import Advertise.Contact;
+import Gui.GuiUpdater;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -33,7 +33,20 @@ public class ContactResolve implements Runnable {
     
     Object lock;
     
-    public ContactResolve(){
+    GuiUpdater updater;
+    
+    
+    
+    public ContactResolve(GuiUpdater updater){
+        
+        self = new Contact("asd", "192.168.1.2");   //get from gui
+        List contacts = new ArrayList<Contact>();
+        
+        this.updater = updater;
+        
+    }
+
+    ContactResolve() {
         
         self = new Contact("asd", "192.168.1.2");   //get from gui
         List contacts = new ArrayList<Contact>();
@@ -45,6 +58,8 @@ public class ContactResolve implements Runnable {
     public void resolveContact(Contact contact){    //updater method
   
         //checks if contact already exists
+        
+        System.out.println(contact.name);
        synchronized(lock)
        {
             Iterator<Contact> iter = contacts.iterator();
@@ -59,14 +74,25 @@ public class ContactResolve implements Runnable {
                     temp.ipaddr = contact.ipaddr;
                     temp.online = true;
                     found = true;
+                    
+                    //updare ui
 
 
                 }
 
             }
 
-            if(found == false){
+            if(iter.hasNext()==false){
                 contacts.add(contact);
+                //update ui
+                System.out.println("updating");
+                
+                
+                
+                
+                
+                
+                //updater.updategui(contacts);
             }
             
             lock.notify();
@@ -95,20 +121,22 @@ public class ContactResolve implements Runnable {
                 
                 Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
                 Contact contact = (Contact) jaxbUnmarshaller.unmarshal(reader);
+                
+                System.out.println("resolving");
                 resolveContact(contact);
                 
                 reader.close();
                 s.close();
                 
             }
+           
             
-            
-            
-            
-            
-            
-            //request details
             //call resolvecontact
+            
+            
+            
+            
+            
         } catch (IOException ex) {
             Logger.getLogger(ContactResolve.class.getName()).log(Level.SEVERE, null, ex);
         } catch (JAXBException ex) {
@@ -133,8 +161,9 @@ public class ContactResolve implements Runnable {
             Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
             
             jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-            
             jaxbMarshaller.marshal(this.self, writer);
+            
+         
             
             
             writer.close();
@@ -166,6 +195,8 @@ public class ContactResolve implements Runnable {
                 temp = iter.next();
                 if(temp.getIp().equals(ipaddr)){
                     temp.online = false;
+                    //update ui
+                    //updater.updategui(contacts);
                 }
             }
             

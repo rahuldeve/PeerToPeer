@@ -6,10 +6,18 @@
 
 package Gui;
 
+import Advertise.Contact;
+import Advertise.ServiceDiscovery;
+import Advertise.ServiceRegister;
 import Communicate.InputServer;
 import Communicate.OutputHandler;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Vector;
+import javax.swing.DefaultListModel;
 
 /**
  *
@@ -21,13 +29,30 @@ public class testgiu extends javax.swing.JFrame {
     GuiUpdater updater;
     InputServer inputserver;
     
+    List<Contact> contacts;
+    
     
 
     /**
      * Creates new form testgiu
      */
     public testgiu() {
+        
+        List contacts = new ArrayList<Contact>();
+        
         initComponents();
+        
+        
+        initDiscovery();
+        //initInputServer();
+
+        
+        
+        
+    }
+    
+    public void initInputServer(){
+        
         updater = new GuiUpdater();
         inputserver = new InputServer(8080,updater);
         
@@ -44,11 +69,53 @@ public class testgiu extends javax.swing.JFrame {
             }
         });
         
-        
-        
-        
-        
     }
+    
+    
+    
+    public void initDiscovery(){
+        
+        updater = new GuiUpdater();
+        
+        
+        Thread servicediscoverthread = new Thread(new ServiceDiscovery(updater));
+        Thread serviceregistrythread = new Thread(new ServiceRegister());
+        
+        
+        
+        updater.addPropertyChangeListener(new PropertyChangeListener(){
+
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                
+                contacts = (List<Contact>)evt.getNewValue();
+                
+                
+                contactlist.removeAll();
+                
+               Iterator<Contact> iter = contacts.iterator();
+               DefaultListModel model = new DefaultListModel();
+               
+                
+                
+               while(iter.hasNext()){
+                   
+                   Contact temp= iter.next();
+                   model.addElement(temp.getName());
+                   
+                   contactlist.setModel(model);
+                   
+                   
+               }
+                
+            }
+            
+        });
+        
+         serviceregistrythread.start();
+         servicediscoverthread.start();
+    }
+    
     
 
 
@@ -68,7 +135,7 @@ public class testgiu extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         intext = new javax.swing.JTextArea();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList();
+        contactlist = new javax.swing.JList();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -92,12 +159,12 @@ public class testgiu extends javax.swing.JFrame {
         intext.setRows(5);
         jScrollPane1.setViewportView(intext);
 
-        jList1.setModel(new javax.swing.AbstractListModel() {
+        contactlist.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
         });
-        jScrollPane2.setViewportView(jList1);
+        jScrollPane2.setViewportView(contactlist);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -218,8 +285,8 @@ public class testgiu extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JToggleButton Switch;
+    private javax.swing.JList contactlist;
     private javax.swing.JTextArea intext;
-    private javax.swing.JList jList1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;

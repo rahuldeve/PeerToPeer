@@ -7,6 +7,7 @@
 package Advertise;
 
 import Advertise.ContactResolve;
+import Gui.GuiUpdater;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -28,11 +29,14 @@ public class ServiceDiscovery implements Runnable{
     private ServiceInfo serviceInfo;
     
     ContactResolve resolver;
+    GuiUpdater updater;
     
     
     public ServiceDiscovery(){
         
+        //resolver = new ContactResolve(updater);
         resolver = new ContactResolve();
+        
         
         
         
@@ -80,6 +84,8 @@ public class ServiceDiscovery implements Runnable{
             Logger.getLogger(ServiceDiscovery.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
+    
     
     
     
@@ -92,7 +98,7 @@ public class ServiceDiscovery implements Runnable{
         senddetails.start();
         
         
-        ServiceDiscovery discoverer = new ServiceDiscovery();
+        //ServiceDiscovery discoverer = new ServiceDiscovery();
         
         
     }
