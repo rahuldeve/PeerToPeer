@@ -10,20 +10,16 @@ import Gui.GuiUpdater;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.StaxDriver;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
 
 /**
  *
@@ -32,7 +28,7 @@ import javax.xml.bind.Unmarshaller;
 public class ContactResolve implements Runnable {
     
     Contact self;
-    List<Contact> contacts;
+    List<Contact> contacts; //need a diff data structure
     
     Object lock;
     
@@ -61,17 +57,21 @@ public class ContactResolve implements Runnable {
     public void resolveContact(Contact contact){    //updater method
   
         //checks if contact already exists
-        
-        System.out.println(contact.name);
-       synchronized(lock)
+        System.out.println("inside func");
+       //synchronized(lock)
        {
+           System.out.println("enterind sync"+contact.ipaddr);
             Iterator<Contact> iter = contacts.iterator();
             boolean found;
             found = false;
+            
+           
+            
 
             while(iter.hasNext() && found==false){
 
                 Contact temp = iter.next();
+                System.out.println(temp.name+"inside while");
                 if(temp.getName().equals(contact.getName()))
                 {
                     temp.ipaddr = contact.ipaddr;
@@ -98,7 +98,7 @@ public class ContactResolve implements Runnable {
                 //updater.updategui(contacts);
             }
             
-            lock.notify();
+            //lock.notify();
             
        }
         
@@ -116,38 +116,18 @@ public class ContactResolve implements Runnable {
             Socket s = new Socket(ipaddr,6666);  
             System.out.println("established" + ipaddr);
             //keep 6666 as port for resolving?
-            InputStream reader = s.getInputStream();
+            
             
             XStream xs = new XStream(new StaxDriver());
+            ObjectInputStream in = xs.createObjectInputStream(s.getInputStream());
             
-            
-            System.out.println(reader.available());
-            if(reader.available()!=0){
-                
-                
-                byte b[] = null;
-                reader.read(b);
-                
-                String xml = new String(b);
-                System.out.println(xml);
-                        
-                
-                System.out.println("resolving");
-               // resolveContact(contact);
-                
-                reader.close();
-                s.close();
-                
-            }
-           
-            
-            //call resolvecontact
+            Contact contact = (Contact) in.readObject();
+            resolveContact(contact);
             
             
             
             
-            
-        } catch (IOException ex) {
+        } catch (IOException | ClassNotFoundException ex) {
             Logger.getLogger(ContactResolve.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -158,28 +138,15 @@ public class ContactResolve implements Runnable {
         
         ServerSocket ss = new ServerSocket(6666);
         
-        // use XSTREAM
+        Socket s = ss.accept();
         
-        //thrread?
-        while(true)
-        {
-            System.out.println("reciving");
-            Socket s=ss.accept();
-            
-            OutputStream writer = s.getOutputStream();
-            
-            XStream xs = new XStream(new StaxDriver());
-            
-            String xml = xs.toXML(this.self);
-            System.out.println(xml);
-            
-            writer.write(xml.getBytes());
-            writer.close();
-            s.close();
-            
-        }
-        //send self details as xml to others
-        //run it in a seperate thread?
+        
+        XStream xs = new XStream(new StaxDriver());
+        ObjectOutputStream out = xs.createObjectOutputStream(s.getOutputStream());
+        
+        out.writeObject(this.self);
+        
+       
     }
     
     
@@ -227,7 +194,7 @@ public class ContactResolve implements Runnable {
     
     
     
-    public void sendContact(){
+    /*public void sendContact(){
         
         //return contact details
         synchronized(lock)
@@ -250,7 +217,7 @@ public class ContactResolve implements Runnable {
                 } catch (InterruptedException ex) {
                 Logger.getLogger(ContactResolve.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                }*/
+                }
             } catch (InterruptedException ex) {
                 Logger.getLogger(ContactResolve.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -258,7 +225,7 @@ public class ContactResolve implements Runnable {
             
         }
         
-    }
+    }*/
 
     
     
