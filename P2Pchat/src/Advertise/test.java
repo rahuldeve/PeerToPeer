@@ -14,14 +14,15 @@ import Advertise.ServiceDiscovery;
  * @author Other
  */
 public class test {
+    
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
         
-        
-        Thread servicediscoverthread = new Thread(new ServiceDiscovery());
+        ContactResolve resolver  =new ContactResolve();
+        Thread servicediscoverthread = new Thread(new ServiceDiscovery(resolver));
         Thread serviceregistrythread = new Thread(new ServiceRegister());
         
        serviceregistrythread.start();

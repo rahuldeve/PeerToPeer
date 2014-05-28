@@ -15,8 +15,10 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.bind.JAXBException;
@@ -28,9 +30,11 @@ import javax.xml.bind.JAXBException;
 public class ContactResolve implements Runnable {
     
     Contact self;
-    List<Contact> contacts; //need a diff data structure
+   
     
-    Object lock;
+    ConcurrentHashMap<String, Contact> contacts;
+    
+    //Object lock;
     
     GuiUpdater updater;
     
@@ -39,16 +43,19 @@ public class ContactResolve implements Runnable {
     public ContactResolve(GuiUpdater updater){
         
         self = new Contact("asd", "192.168.1.2");   //get from gui
-        List contacts = new ArrayList<Contact>();
+        //HashMap contactsi = new HashMap();
         
         this.updater = updater;
+        
         
     }
 
     ContactResolve() {
         
         self = new Contact("asd", "192.168.1.2");   //get from gui
-        List contacts = new ArrayList<Contact>();
+       // List contacts = new ArrayList<Contact>();
+        //HashMap contacts = new HashMap<>();
+        
         
     }
     
@@ -57,9 +64,19 @@ public class ContactResolve implements Runnable {
     public void resolveContact(Contact contact){    //updater method
   
         //checks if contact already exists
+        System.out.println(Thread.currentThread().getName());
+        this.contacts.put(contact.ipaddr, contact);
         System.out.println("inside func");
        //synchronized(lock)
-       {
+        
+        
+        if(true){
+            
+            
+            System.out.println("work");
+        }
+        
+       /*{
            System.out.println("enterind sync"+contact.ipaddr);
             Iterator<Contact> iter = contacts.iterator();
             boolean found;
@@ -100,7 +117,7 @@ public class ContactResolve implements Runnable {
             
             //lock.notify();
             
-       }
+       }*/
         
         
         
@@ -155,7 +172,7 @@ public class ContactResolve implements Runnable {
         // set recived contact status as offline
         // thread issues may happen here
         
-        synchronized(lock)
+       /* synchronized(lock)
         {
             
            
@@ -176,20 +193,20 @@ public class ContactResolve implements Runnable {
             }
             
             
-           /* if(Thread.holdsLock(lock))
+            if(Thread.holdsLock(lock))
             {
                 try {
                     lock.wait();
                 } catch (InterruptedException ex) {
                     Logger.getLogger(ContactResolve.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            }*/
+            }
             
             lock.notify();
             
         }
         
-        
+        */
     }
     
     
@@ -238,9 +255,7 @@ public class ContactResolve implements Runnable {
             sendDetails();
             
             
-        } catch (IOException ex) {
-            Logger.getLogger(ContactResolve.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (JAXBException ex) {
+        } catch (IOException | JAXBException ex) {
             Logger.getLogger(ContactResolve.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

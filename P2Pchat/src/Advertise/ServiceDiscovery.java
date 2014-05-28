@@ -30,10 +30,10 @@ public class ServiceDiscovery implements Runnable{
     GuiUpdater updater;
     
     
-    public ServiceDiscovery(){
+    public ServiceDiscovery(final ContactResolve resolver){
         
         //resolver = new ContactResolve(updater);
-        resolver = new ContactResolve();
+        this.resolver = resolver;
         
         
         
