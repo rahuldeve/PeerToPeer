@@ -14,10 +14,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -27,54 +24,57 @@ import javax.xml.bind.JAXBException;
  *
  * @author Other
  */
-public class ContactResolve implements Runnable {
+public class ContactResolve extends Thread {
+    
+    //CONSUMER
     
     Contact self;
-   
-    
-    ConcurrentHashMap<String, Contact> contacts;
-    
-    //Object lock;
-    
     GuiUpdater updater;
+    ServiceDiscovery producer;
+    HashMap<String, Contact> contacts = new HashMap<>();
     
     
     
-    public ContactResolve(GuiUpdater updater){
+    public ContactResolve(ServiceDiscovery producer){
         
         self = new Contact("asd", "192.168.1.2");   //get from gui
-        //HashMap contactsi = new HashMap();
-        
-        this.updater = updater;
+        this.producer = producer;
         
         
     }
 
-    ContactResolve() {
+    public ContactResolve(ServiceDiscovery producer,GuiUpdater updater) {
         
         self = new Contact("asd", "192.168.1.2");   //get from gui
-       // List contacts = new ArrayList<Contact>();
-        //HashMap contacts = new HashMap<>();
-        
+        this.producer = producer;
+        this.updater = updater;
         
     }
     
     
     //TODO: try advertisments?
     public void resolveContact(Contact contact){    //updater method
+        
+        
   
         //checks if contact already exists
-        System.out.println(Thread.currentThread().getName());
-        this.contacts.put(contact.ipaddr, contact);
+        System.out.println(Thread.currentThread().getId());
+        
+        if(contacts.containsKey(contact.ipaddr)){
+            
+            //set online
+            updater.updategui(contacts);
+            
+        }else{
+            
+            contacts.put(contact.getIp(),contact);
+            updater.updategui(contacts);
+        }
+        
         System.out.println("inside func");
+        
        //synchronized(lock)
         
-        
-        if(true){
-            
-            
-            System.out.println("work");
-        }
         
        /*{
            System.out.println("enterind sync"+contact.ipaddr);
@@ -155,13 +155,18 @@ public class ContactResolve implements Runnable {
         
         ServerSocket ss = new ServerSocket(6666);
         
-        Socket s = ss.accept();
+        while(true){
+            Socket s = ss.accept();
         
         
-        XStream xs = new XStream(new StaxDriver());
-        ObjectOutputStream out = xs.createObjectOutputStream(s.getOutputStream());
         
-        out.writeObject(this.self);
+            XStream xs = new XStream(new StaxDriver());
+            ObjectOutputStream out = xs.createObjectOutputStream(s.getOutputStream());
+        
+            out.writeObject(this.self);
+            out.close();
+        
+        }
         
        
     }
@@ -250,13 +255,49 @@ public class ContactResolve implements Runnable {
     @Override
     public void run() {
         
-        try {
+        
+        Thread sendDetailsthread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                
+                while(true){
+                    try {
+                        
+                        
+                        sendDetails();
+                        
+                        
+                    } catch (IOException | JAXBException ex) {
+                        Logger.getLogger(ContactResolve.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        });
+        
+        sendDetailsthread.start();
+        
+                
+                
+        
+        while(true){
             
-            sendDetails();
+            
+            String mess = producer.getEvent();
+            if(mess!=null){
+                
+                System.out.println(mess);
+                establishConnection(mess);
+            
+            }
+            
+            try {
+                sleep(4000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(ContactResolve.class.getName()).log(Level.SEVERE, null, ex);
+            }
             
             
-        } catch (IOException | JAXBException ex) {
-            Logger.getLogger(ContactResolve.class.getName()).log(Level.SEVERE, null, ex);
+            
         }
     }
 

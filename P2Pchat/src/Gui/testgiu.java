@@ -7,16 +7,21 @@
 package Gui;
 
 import Advertise.Contact;
+import Advertise.ContactResolve;
 import Advertise.ServiceDiscovery;
 import Advertise.ServiceRegister;
+import Advertise.test;
 import Communicate.InputServer;
 import Communicate.OutputHandler;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import static java.lang.Thread.sleep;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 
 /**
@@ -29,7 +34,7 @@ public class testgiu extends javax.swing.JFrame {
     GuiUpdater updater;
     InputServer inputserver;
     
-    List<Contact> contacts;
+    HashMap contacts;
     
     
 
@@ -38,11 +43,7 @@ public class testgiu extends javax.swing.JFrame {
      */
     public testgiu() {
         
-        List contacts = new ArrayList<Contact>();
-        
         initComponents();
-        
-        
         initDiscovery();
         //initInputServer();
 
@@ -78,9 +79,21 @@ public class testgiu extends javax.swing.JFrame {
         updater = new GuiUpdater();
         
         
-        Thread servicediscoverthread = new Thread(new ServiceDiscovery(updater));
-        Thread serviceregistrythread = new Thread(new ServiceRegister());
+        ServiceDiscovery servicediscoverythread = new ServiceDiscovery();
+        ServiceRegister serviceregisterthread = new ServiceRegister();
+        ContactResolve resolver  =new ContactResolve(servicediscoverythread,updater);
         
+       serviceregisterthread.start();
+       servicediscoverythread.start();
+       
+        try {
+            
+            sleep(5000);
+            resolver.start();
+            
+        } catch (InterruptedException ex) {
+            Logger.getLogger(test.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
         
         updater.addPropertyChangeListener(new PropertyChangeListener(){
@@ -88,21 +101,21 @@ public class testgiu extends javax.swing.JFrame {
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
                 
-                contacts = (List<Contact>)evt.getNewValue();
+                contacts = (HashMap) evt.getNewValue();
                 
                 
                 contactlist.removeAll();
                 
-               Iterator<Contact> iter = contacts.iterator();
+               Iterator<Contact> iter = contacts.entrySet().iterator();
                DefaultListModel model = new DefaultListModel();
                
                 
                 
                while(iter.hasNext()){
                    
+                   System.out.println(iter.next());
                    Contact temp= iter.next();
                    model.addElement(temp.getName());
-                   
                    contactlist.setModel(model);
                    
                    
@@ -112,8 +125,6 @@ public class testgiu extends javax.swing.JFrame {
             
         });
         
-         serviceregistrythread.start();
-         servicediscoverthread.start();
     }
     
     

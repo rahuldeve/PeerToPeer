@@ -19,30 +19,63 @@ import javax.jmdns.ServiceListener;
  *
  * @author Other
  */
-public class ServiceDiscovery implements Runnable{
+public class ServiceDiscovery extends Thread{
     
     private String type = "_chat._tcp.local.";
     private JmDNS jmdns = null;
     private ServiceListener listener = null;
     private ServiceInfo serviceInfo;
     
-    ContactResolve resolver;
-    GuiUpdater updater;
+    //ContactResolve resolver;
+    //GuiUpdater updater;
+    
+    boolean old;
+    String additions;//use queue later
     
     
-    public ServiceDiscovery(final ContactResolve resolver){
+    public ServiceDiscovery(){
+        
+        old = true;
         
         //resolver = new ContactResolve(updater);
-        this.resolver = resolver;
         
+ 
+    }
+    
+    //PRODUCER
+    public synchronized void setEvent(String ipaddr){
         
+        additions = ipaddr;
+        old = false;
+        System.out.println(ipaddr);
+        notify();
         
+    }
+    
+    //called by consumer
+    public synchronized String getEvent(){
+        if(old==false){
+            
+            old=true;
+            return additions;
+        }
+        else{
+            return null;
+        }
         
+    }
+
+    
+    
+    
+    
+
+    @Override
+    public void run() {
         
         
         try {
             jmdns = JmDNS.create();
-            
             jmdns.addServiceListener(type, listener = new ServiceListener() {
                 
                 @Override
@@ -56,7 +89,10 @@ public class ServiceDiscovery implements Runnable{
                         //maintain a record of previous ipaddr
                         //call only if new
                         
-                        resolver.establishConnection(additions);
+                        //resolver.establishConnection(additions);
+                        
+                        setEvent(additions);
+                        System.out.println(additions);
                     }
                 }
 
@@ -65,7 +101,7 @@ public class ServiceDiscovery implements Runnable{
                     //notifyUser("Service removed: " + ev.getName());
                     
                     //notify as offline
-                    resolver.setOffline(ev.getInfo().getInetAddresses()[0].getHostAddress());
+                    //resolver.setOffline(ev.getInfo().getInetAddresses()[0].getHostAddress());
                     
                 }
 
@@ -81,20 +117,8 @@ public class ServiceDiscovery implements Runnable{
         } catch (IOException ex) {
             Logger.getLogger(ServiceDiscovery.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
-
-    
-    
-    
-    
-
-    @Override
-    public void run() {
         
-        
-       Thread senddetails = new Thread((Runnable) resolver);
-        senddetails.start();
-        
+       
         
         //ServiceDiscovery discoverer = new ServiceDiscovery();
         

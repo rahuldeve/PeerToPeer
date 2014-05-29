@@ -16,11 +16,20 @@ import javax.jmdns.ServiceInfo;
  *
  * @author Other
  */
-public class ServiceRegister implements Runnable {
+public class ServiceRegister extends Thread {
     
     private JmDNS mdnsServer = null;
     
     public ServiceRegister(){
+    }
+    
+    
+    
+
+    @Override
+    public void run() {
+        
+       // ServiceRegister registerer = new ServiceRegister();
         
         try {
             
@@ -33,14 +42,6 @@ public class ServiceRegister implements Runnable {
         } catch (IOException ex) {
             Logger.getLogger(ServiceRegister.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        
-    }
-
-    @Override
-    public void run() {
-        
-        ServiceRegister registerer = new ServiceRegister();
         
         
     }
