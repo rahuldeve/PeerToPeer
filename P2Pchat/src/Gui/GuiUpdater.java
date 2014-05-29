@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package Gui;
 
 import java.beans.PropertyChangeListener;
@@ -13,34 +12,26 @@ import javax.swing.event.SwingPropertyChangeSupport;
  *
  * @author Other
  */
+public class GuiUpdater {
 
-
-public class GuiUpdater   {
-    
     private SwingPropertyChangeSupport pChange = new SwingPropertyChangeSupport(this);
     public static final String MESSAGE = "1";
-    
-    
-    public void updategui(Object msg){
-        
+
+    public void updategui(Object msg) {
+
         String old;
         old = "asdf";
         System.out.println("updating gui");
-        pChange.firePropertyChange(MESSAGE,old , msg);
-        
+        pChange.firePropertyChange(MESSAGE, old, msg);
+
     }
-    
-    public void addPropertyChangeListener (PropertyChangeListener listener){
-            pChange.addPropertyChangeListener(MESSAGE, listener);
-        }
-    
-    
-    public void removePropertyChangeListener(PropertyChangeListener listener){
-            pChange.removePropertyChangeListener(MESSAGE, listener);
-        }
 
- 
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        pChange.addPropertyChangeListener(MESSAGE, listener);
+    }
 
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
+        pChange.removePropertyChangeListener(MESSAGE, listener);
+    }
 
-    
 }

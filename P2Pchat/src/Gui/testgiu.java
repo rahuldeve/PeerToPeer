@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package Gui;
 
 import Advertise.Contact;
@@ -29,107 +28,88 @@ import javax.swing.DefaultListModel;
  * @author Other
  */
 public class testgiu extends javax.swing.JFrame {
-    
-    
+
     GuiUpdater updater;
     InputServer inputserver;
-    
+
     List contacts;
-    
-    
 
     /**
      * Creates new form testgiu
      */
     public testgiu() {
-        
+
         initComponents();
         initDiscovery();
         //initInputServer();
 
-        
-        
-        
     }
-    
-    public void initInputServer(){
-        
+
+    public void initInputServer() {
+
         updater = new GuiUpdater();
-        inputserver = new InputServer(8080,updater);
-        
-        
-        
+        inputserver = new InputServer(8080, updater);
+
         updater.addPropertyChangeListener(new PropertyChangeListener() {
 
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
-                
-                String message  = (String)evt.getNewValue();
-                intext.setText(intext.getText()+"\n"+message);
-                
+
+                String message = (String) evt.getNewValue();
+                intext.setText(intext.getText() + "\n" + message);
+
             }
         });
-        
+
     }
-    
-    
-    
-    public void initDiscovery(){
-        
+
+    public void initDiscovery() {
+
         updater = new GuiUpdater();
-        
-        
+
         ServiceDiscovery servicediscoverythread = new ServiceDiscovery();
         ServiceRegister serviceregisterthread = new ServiceRegister();
-        ContactResolve resolver  =new ContactResolve(servicediscoverythread,updater);
-        
-       serviceregisterthread.start();
-       servicediscoverythread.start();
-       
+        ContactResolve resolver = new ContactResolve(servicediscoverythread, updater);
+
+        serviceregisterthread.start();
+        servicediscoverythread.start();
+
         try {
-            
+
             sleep(5000);
             resolver.start();
-            
+
         } catch (InterruptedException ex) {
             Logger.getLogger(test.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        
-        updater.addPropertyChangeListener(new PropertyChangeListener(){
+
+        updater.addPropertyChangeListener(new PropertyChangeListener() {
 
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
-                
-                HashMap temp = (HashMap) evt.getNewValue();
-                List<Contact>contacts = new ArrayList(temp.values());
-                
-                
-                contactlist.removeAll();
-                
-               Iterator<Contact> iter = contacts.iterator();
-               DefaultListModel model = new DefaultListModel();
-               
-                
-                
-               while(iter.hasNext()){
-                   
-                   //System.out.println(iter.next());
-                   //Contact temp =(Contact) iter.next();
-                   model.addElement(iter.next().getName());
-                   contactlist.setModel(model);
-                   
-                   
-               }
-                
-            }
-            
-        });
-        
-    }
-    
-    
 
+                HashMap temp = (HashMap) evt.getNewValue();
+                List<Contact> contacts = new ArrayList(temp.values());
+
+                contactlist.removeAll();
+
+                Iterator<Contact> iter = contacts.iterator();
+                DefaultListModel model = new DefaultListModel();
+
+                while (iter.hasNext()) {
+
+                   //System.out.println(iter.next());
+                    //Contact temp =(Contact) iter.next();
+                    model.addElement(iter.next().getName());
+                    contactlist.setModel(model);
+
+                }
+
+            }
+
+        });
+
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -229,35 +209,30 @@ public class testgiu extends javax.swing.JFrame {
 
     private void sendbuttonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_sendbuttonMouseClicked
         // TODO add your handling code here:
-        
+
         String message = sendtext.getText();
         OutputHandler handler = new OutputHandler();
         handler.sendMessage(message);
-        
-        
+
+
     }//GEN-LAST:event_sendbuttonMouseClicked
 
     private void SwitchMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SwitchMouseClicked
         // TODO add your handling code here:
-        
+
         //Thread inputserverthread = new Thread(inputserver);
-        
-        if(Switch.isSelected()){
-            
+        if (Switch.isSelected()) {
+
             //InputServer inputserver = new InputServer(8080);
-            
             Switch.setText("ON");
             Thread inputServerThread = new Thread(inputserver);
             inputServerThread.start();
-        }
-        
-        else{
+        } else {
             Switch.setText("OFF");
             inputserver.shutdown();
         }
-            
-            
-        
+
+
     }//GEN-LAST:event_SwitchMouseClicked
 
     /**

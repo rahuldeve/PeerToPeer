@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package Communicate;
 
 import Gui.GuiUpdater;
@@ -17,41 +16,29 @@ import javax.swing.SwingWorker;
  *
  * @author Other
  */
-
 //netty server side handler
 @Sharable
-public class InputHandler extends ChannelInboundHandlerAdapter{
-    
+public class InputHandler extends ChannelInboundHandlerAdapter {
+
     public GuiUpdater updater;
-    
-    public InputHandler(GuiUpdater updater){
+
+    public InputHandler(GuiUpdater updater) {
         this.updater = updater;
     }
-    
-    
-    
+
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) { // (2)
         // Discard the received data silently.
-        
-        
-        //TODO: use a replaying decoder
-        ByteBuf in  = (ByteBuf)msg;
-        
-        String message = in.toString(io.netty.util.CharsetUtil.US_ASCII);
-        
-        
-        //convert message
-        updater.updategui(message);
-        //System.out.println(message);
-        //wrute to gui
-        
 
-        
-        
+        //TODO: use a replaying decoder
+        ByteBuf in = (ByteBuf) msg;
+
+        String message = in.toString(io.netty.util.CharsetUtil.US_ASCII);
+
+        //send to gui
+        updater.updategui(message);
+
     }
-    
-    
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) { // (4)
@@ -59,5 +46,5 @@ public class InputHandler extends ChannelInboundHandlerAdapter{
         cause.printStackTrace();
         ctx.close();
     }
-    
+
 }

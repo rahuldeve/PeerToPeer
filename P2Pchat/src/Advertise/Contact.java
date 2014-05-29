@@ -28,10 +28,6 @@ public class Contact {
 
     }
 
-    Contact() {
-
-    }
-
     @XmlAttribute
     public String getName() {
         return this.name;

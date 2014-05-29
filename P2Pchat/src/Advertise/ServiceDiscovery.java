@@ -3,10 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package Advertise;
 
-import Gui.GuiUpdater;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -19,78 +17,56 @@ import javax.jmdns.ServiceListener;
  *
  * @author Other
  */
-public class ServiceDiscovery extends Thread{
-    
+public class ServiceDiscovery extends Thread {
+
     private String type = "_chat._tcp.local.";
     private JmDNS jmdns = null;
     private ServiceListener listener = null;
     private ServiceInfo serviceInfo;
-    
-    //ContactResolve resolver;
-    //GuiUpdater updater;
-    
     boolean old;
     String additions;//use queue later
-    
-    
-    public ServiceDiscovery(){
-        
+
+    public ServiceDiscovery() {
         old = true;
-        
-        //resolver = new ContactResolve(updater);
-        
- 
     }
-    
+
     //PRODUCER
-    public synchronized void setEvent(String ipaddr){
-        
+    public synchronized void setEvent(String ipaddr) {
+
         additions = ipaddr;
         old = false;
         System.out.println(ipaddr);
         notify();
-        
-    }
-    
-    //called by consumer
-    public synchronized String getEvent(){
-        if(old==false){
-            
-            old=true;
-            return additions;
-        }
-        else{
-            return null;
-        }
-        
+
     }
 
-    
-    
-    
-    
+    //called by consumer
+    public synchronized String getEvent() {
+        if (old == false) {
+
+            old = true;
+            return additions;
+            
+        } else {
+            return null;
+        }
+
+    }
 
     @Override
     public void run() {
-        
-        
+
         try {
             jmdns = JmDNS.create();
             jmdns.addServiceListener(type, listener = new ServiceListener() {
-                
+
                 @Override
                 public void serviceResolved(ServiceEvent ev) {
-                    
+
                     String additions = "";
                     if (ev.getInfo().getInetAddresses() != null && ev.getInfo().getInetAddresses().length > 0) {
                         additions = ev.getInfo().getInetAddresses()[0].getHostAddress();
-                        System.out.println("Service resolved: " + ev.getInfo().getQualifiedName() + " port:" + ev.getInfo().getPort() + " "+additions);
-                        
-                        //maintain a record of previous ipaddr
-                        //call only if new
-                        
-                        //resolver.establishConnection(additions);
-                        
+                        System.out.println("Service resolved: " + ev.getInfo().getQualifiedName() + " port:" + ev.getInfo().getPort() + " " + additions);
                         setEvent(additions);
                         System.out.println(additions);
                     }
@@ -99,10 +75,9 @@ public class ServiceDiscovery extends Thread{
                 @Override
                 public void serviceRemoved(ServiceEvent ev) {
                     //notifyUser("Service removed: " + ev.getName());
-                    
+
                     //notify as offline
                     //resolver.setOffline(ev.getInfo().getInetAddresses()[0].getHostAddress());
-                    
                 }
 
                 @Override
@@ -111,18 +86,10 @@ public class ServiceDiscovery extends Thread{
                     jmdns.requestServiceInfo(event.getType(), event.getName(), 1);
                 }
             });
-            
-            
-            
+
         } catch (IOException ex) {
             Logger.getLogger(ServiceDiscovery.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-       
-        
-        //ServiceDiscovery discoverer = new ServiceDiscovery();
-        
-        
     }
-    
+
 }

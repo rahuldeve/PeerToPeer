@@ -21,10 +21,8 @@ public class OutputHandler {
     public void sendMessage(String message) {
 
         try {
-            
-            
-            //TODO: use netty for sending data and use an encoder for encoding the messagee
 
+            //TODO: use netty for sending data and use an encoder for encoding the messagee
             Socket s = new Socket("localhost", 8080);
             OutputStream out = s.getOutputStream();
             out.write(message.getBytes());
