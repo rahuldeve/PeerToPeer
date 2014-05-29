@@ -34,7 +34,7 @@ public class testgiu extends javax.swing.JFrame {
     GuiUpdater updater;
     InputServer inputserver;
     
-    HashMap contacts;
+    List contacts;
     
     
 
@@ -101,21 +101,22 @@ public class testgiu extends javax.swing.JFrame {
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
                 
-                contacts = (HashMap) evt.getNewValue();
+                HashMap temp = (HashMap) evt.getNewValue();
+                List<Contact>contacts = new ArrayList(temp.values());
                 
                 
                 contactlist.removeAll();
                 
-               Iterator<Contact> iter = contacts.entrySet().iterator();
+               Iterator<Contact> iter = contacts.iterator();
                DefaultListModel model = new DefaultListModel();
                
                 
                 
                while(iter.hasNext()){
                    
-                   System.out.println(iter.next());
-                   Contact temp= iter.next();
-                   model.addElement(temp.getName());
+                   //System.out.println(iter.next());
+                   //Contact temp =(Contact) iter.next();
+                   model.addElement(iter.next().getName());
                    contactlist.setModel(model);
                    
                    
