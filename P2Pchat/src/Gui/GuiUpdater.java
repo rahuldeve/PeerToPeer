@@ -14,7 +14,7 @@ import javax.swing.event.SwingPropertyChangeSupport;
  */
 public class GuiUpdater {
 
-    private SwingPropertyChangeSupport pChange = new SwingPropertyChangeSupport(this);
+    private final SwingPropertyChangeSupport pChange = new SwingPropertyChangeSupport(this);
     public static final String MESSAGE = "1";
 
     public void updategui(Object msg) {

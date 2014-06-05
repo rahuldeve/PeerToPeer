@@ -19,7 +19,7 @@ import javax.jmdns.ServiceListener;
  */
 public class ServiceDiscovery extends Thread {
 
-    private String type = "_chat._tcp.local.";
+    private final String type = "_chat._tcp.local.";
     private JmDNS jmdns = null;
     private ServiceListener listener = null;
     private ServiceInfo serviceInfo;
@@ -51,6 +51,10 @@ public class ServiceDiscovery extends Thread {
             return null;
         }
 
+    }
+    
+    public void shutdown(){
+        jmdns.removeServiceListener(type, listener);
     }
 
     @Override

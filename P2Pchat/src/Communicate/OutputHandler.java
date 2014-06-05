@@ -18,14 +18,17 @@ import java.util.logging.Logger;
 public class OutputHandler {
 
     //run it under a swing worker
-    public void sendMessage(String message) {
+    public void sendMessage(Message message) {
 
         try {
 
-            //TODO: use netty for sending data and use an encoder for encoding the messagee
-            Socket s = new Socket("localhost", 8080);
+            //TODO: use netty for sending data and use an encoder for encoding the message
+            
+            Socket s = new Socket(message.to, 8080);
+            
+            //xml messages?
             OutputStream out = s.getOutputStream();
-            out.write(message.getBytes());
+            out.write(message.content.getBytes());
             out.close();
             s.close();
 

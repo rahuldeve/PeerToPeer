@@ -21,6 +21,11 @@ public class ServiceRegister extends Thread {
 
     public ServiceRegister() {
     }
+    
+    public void shutdown(){
+        mdnsServer.unregisterAllServices();
+        
+    }
 
     @Override
     public void run() {
@@ -29,7 +34,6 @@ public class ServiceRegister extends Thread {
         try {
 
             mdnsServer = JmDNS.create();
-
             ServiceInfo testService = ServiceInfo.create("_chat._tcp.local.", "Test Service", 6666, "test service");
             mdnsServer.registerService(testService);
             System.out.println("registered service as _workstation._tcp.local.");

@@ -9,18 +9,16 @@ import Advertise.Contact;
 import Advertise.ContactResolve;
 import Advertise.ServiceDiscovery;
 import Advertise.ServiceRegister;
-import Advertise.test;
 import Communicate.InputServer;
+import Communicate.Message;
 import Communicate.OutputHandler;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import static java.lang.Thread.sleep;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.Set;
 import javax.swing.DefaultListModel;
 
 /**
@@ -31,8 +29,14 @@ public class testgiu extends javax.swing.JFrame {
 
     GuiUpdater updater;
     InputServer inputserver;
+    ServiceDiscovery servicediscoverythread;
+    ServiceRegister serviceregisterthread;
+    ContactResolve resolver;
 
     List contacts;
+    HashMap<String, Contact> contactmap = new HashMap<>();
+    
+    public static Contact self;
 
     /**
      * Creates new form testgiu
@@ -41,8 +45,13 @@ public class testgiu extends javax.swing.JFrame {
 
         initComponents();
         initDiscovery();
-        //initInputServer();
+        initInputServer();
+        setSelf();
 
+    }
+    
+    public static void setSelf(){
+        self = new Contact("asd", "192.168.1.2");
     }
 
     public void initInputServer() {
@@ -67,28 +76,17 @@ public class testgiu extends javax.swing.JFrame {
 
         updater = new GuiUpdater();
 
-        ServiceDiscovery servicediscoverythread = new ServiceDiscovery();
-        ServiceRegister serviceregisterthread = new ServiceRegister();
-        ContactResolve resolver = new ContactResolve(servicediscoverythread, updater);
-
-        serviceregisterthread.start();
-        servicediscoverythread.start();
-
-        try {
-
-            sleep(5000);
-            resolver.start();
-
-        } catch (InterruptedException ex) {
-            Logger.getLogger(test.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        servicediscoverythread = new ServiceDiscovery();
+        serviceregisterthread = new ServiceRegister();
+        resolver = new ContactResolve(servicediscoverythread, updater);
 
         updater.addPropertyChangeListener(new PropertyChangeListener() {
 
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
 
-                HashMap temp = (HashMap) evt.getNewValue();
+                contactmap = (HashMap) evt.getNewValue();
+                HashMap temp = contactmap;
                 List<Contact> contacts = new ArrayList(temp.values());
 
                 contactlist.removeAll();
@@ -98,7 +96,7 @@ public class testgiu extends javax.swing.JFrame {
 
                 while (iter.hasNext()) {
 
-                   //System.out.println(iter.next());
+                    //System.out.println(iter.next());
                     //Contact temp =(Contact) iter.next();
                     model.addElement(iter.next().getName());
                     contactlist.setModel(model);
@@ -208,9 +206,14 @@ public class testgiu extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void sendbuttonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_sendbuttonMouseClicked
-        // TODO add your handling code here:
 
-        String message = sendtext.getText();
+        String temp = contactlist.getSelectedValue().toString();
+        Contact w =  contactmap.get(temp);
+        
+        String from = this.self.getName();
+        String to = w.getIp();
+        String content = sendtext.getText();
+        Message message = new Message(content, to, from);
         OutputHandler handler = new OutputHandler();
         handler.sendMessage(message);
 
@@ -218,18 +221,23 @@ public class testgiu extends javax.swing.JFrame {
     }//GEN-LAST:event_sendbuttonMouseClicked
 
     private void SwitchMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SwitchMouseClicked
-        // TODO add your handling code here:
 
-        //Thread inputserverthread = new Thread(inputserver);
         if (Switch.isSelected()) {
 
-            //InputServer inputserver = new InputServer(8080);
             Switch.setText("ON");
             Thread inputServerThread = new Thread(inputserver);
             inputServerThread.start();
+
+            serviceregisterthread.start();
+            servicediscoverythread.start();
+            resolver.start();
+
         } else {
             Switch.setText("OFF");
             inputserver.shutdown();
+
+            serviceregisterthread.shutdown();
+            servicediscoverythread.shutdown();
         }
 
 
@@ -264,6 +272,8 @@ public class testgiu extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
+            
+            @Override
             public void run() {
                 new testgiu().setVisible(true);
             }

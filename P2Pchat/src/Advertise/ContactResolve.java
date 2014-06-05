@@ -51,14 +51,14 @@ public class ContactResolve extends Thread {
         //checks if contact already exists
         System.out.println(Thread.currentThread().getId());
 
-        if (contacts.containsKey(contact.ipaddr)) {
+        if (contacts.containsKey(contact.getName())) {
 
             //set online
             updater.updategui(contacts);
 
         } else {
 
-            contacts.put(contact.getIp(), contact);
+            contacts.put(contact.getName(), contact);
             updater.updategui(contacts);
         }
 
