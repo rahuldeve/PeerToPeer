@@ -35,7 +35,7 @@ public class testgiu extends javax.swing.JFrame {
 
     List contacts;
     HashMap<String, Contact> contactmap = new HashMap<>();
-    
+
     public static Contact self;
 
     /**
@@ -49,8 +49,8 @@ public class testgiu extends javax.swing.JFrame {
         setSelf();
 
     }
-    
-    public static void setSelf(){
+
+    public static void setSelf() {
         self = new Contact("asd", "192.168.1.2");
     }
 
@@ -206,9 +206,9 @@ public class testgiu extends javax.swing.JFrame {
     private void sendbuttonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_sendbuttonMouseClicked
 
         String temp = contactlist.getSelectedValue().toString();
-        Contact w =  contactmap.get(temp);
-        
-        String from = this.self.getName();
+        Contact w = contactmap.get(temp);
+
+        String from = testgiu.self.getName();
         String to = w.getIp();
         String content = sendtext.getText();
         Message message = new Message(content, to, from);
@@ -232,8 +232,8 @@ public class testgiu extends javax.swing.JFrame {
 
         } else {
             Switch.setText("OFF");
+            
             inputserver.shutdown();
-
             serviceregisterthread.shutdown();
             servicediscoverythread.shutdown();
         }
@@ -270,7 +270,7 @@ public class testgiu extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
-            
+
             @Override
             public void run() {
                 new testgiu().setVisible(true);

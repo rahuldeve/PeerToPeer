@@ -71,16 +71,18 @@ public class ServiceDiscovery extends Thread {
                     if (ev.getInfo().getInetAddresses() != null && ev.getInfo().getInetAddresses().length > 0) {
                         additions = ev.getInfo().getInetAddresses()[0].getHostAddress();
                         System.out.println("Service resolved: " + ev.getInfo().getQualifiedName() + " port:" + ev.getInfo().getPort() + " " + additions);
-                        setEvent(additions);
+                        setEvent("1"+additions);
                         System.out.println(additions);
                     }
                 }
 
                 @Override
                 public void serviceRemoved(ServiceEvent ev) {
-                    //notifyUser("Service removed: " + ev.getName());
+                    System.out.println("Service removed: " + ev.getName());
 
                     //notify as offline
+                    String ipaddr = ev.getInfo().getInetAddresses()[0].getHostAddress();
+                    setEvent("0"+ipaddr);
                     //resolver.setOffline(ev.getInfo().getInetAddresses()[0].getHostAddress());
                 }
 

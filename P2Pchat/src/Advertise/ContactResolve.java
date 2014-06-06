@@ -13,7 +13,10 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.bind.JAXBException;
@@ -47,10 +50,7 @@ public class ContactResolve extends Thread {
 
     //TODO: try advertisments?
     public void resolveContact(Contact contact) {    //updater method
-
-        //checks if contact already exists
-        System.out.println(Thread.currentThread().getId());
-
+        
         if (contacts.containsKey(contact.getName())) {
 
             //set online
@@ -105,44 +105,22 @@ public class ContactResolve extends Thread {
     }
 
     public void setOffline(String ipaddr) {      //updater method
-        // set recived contact status as offline
-        // thread issues may happen here
-
-        /* synchronized(lock)
-         {
-            
-           
-            
-         Iterator<Contact> iter = contacts.iterator();
-         Contact temp;
-
-
-
-         while(iter.hasNext()){
-
-         temp = iter.next();
-         if(temp.getIp().equals(ipaddr)){
-         temp.online = false;
-         //update ui
-         //updater.updategui(contacts);
-         }
-         }
-            
-            
-         if(Thread.holdsLock(lock))
-         {
-         try {
-         lock.wait();
-         } catch (InterruptedException ex) {
-         Logger.getLogger(ContactResolve.class.getName()).log(Level.SEVERE, null, ex);
-         }
-         }
-            
-         lock.notify();
-            
-         }
         
-         */
+        
+        List<Contact> temp = new ArrayList<>(contacts.values());
+        Iterator<Contact> iter = temp.iterator();
+        
+        while(iter.hasNext()){
+            
+            Contact tempc = iter.next();
+            if(ipaddr.equals(tempc.getIp())){
+                contacts.remove(tempc.getName());
+            }
+            
+            updater.updategui(contacts);
+            
+        }
+        
     }
 
     @Override
@@ -170,9 +148,23 @@ public class ContactResolve extends Thread {
 
             String mess = producer.getEvent();
             if (mess != null) {
+                
+                //1=establish connetcion
+                //0=set offline
+                
+                if(mess.startsWith("1")){
+                    
+                    System.out.println(mess);
+                    establishConnection(mess.substring(1));
+                    
+                }else{
+                    
+                    setOffline(mess.substring(1));
+                    
+                }
 
-                System.out.println(mess);
-                establishConnection(mess);
+                
+                
 
             }
 
