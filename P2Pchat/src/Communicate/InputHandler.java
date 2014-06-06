@@ -6,6 +6,8 @@
 package Communicate;
 
 import Gui.GuiUpdater;
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.StaxDriver;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
@@ -27,15 +29,15 @@ public class InputHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) { // (2)
-        // Discard the received data silently.
-
-        //TODO: use a replaying decoder
+        
         ByteBuf in = (ByteBuf) msg;
-
-        String message = in.toString(io.netty.util.CharsetUtil.US_ASCII);
+        String xml = in.toString(io.netty.util.CharsetUtil.US_ASCII);
+        
+        XStream xs = new XStream(new StaxDriver());
+        Message message = (Message) xs.fromXML(xml);
 
         //send to gui
-        updater.updategui(message);
+        updater.updategui(message.from+" : " + message.content);
 
     }
 

@@ -5,6 +5,8 @@
  */
 package Communicate;
 
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.StaxDriver;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
@@ -27,8 +29,11 @@ public class OutputHandler {
             Socket s = new Socket(message.to, 8080);
             
             //xml messages?
+            XStream xs = new XStream(new StaxDriver());
+            String xml = xs.toXML(message);
+            
             OutputStream out = s.getOutputStream();
-            out.write(message.content.getBytes());
+            out.write(xml.getBytes());
             out.close();
             s.close();
 

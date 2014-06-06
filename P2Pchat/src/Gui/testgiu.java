@@ -129,8 +129,6 @@ public class testgiu extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        sendtext.setText("jTextField1");
-
         Switch.setText("On/Off");
         Switch.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -150,7 +148,7 @@ public class testgiu extends javax.swing.JFrame {
         jScrollPane1.setViewportView(intext);
 
         contactlist.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            String[] strings = { "Loading" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
         });
