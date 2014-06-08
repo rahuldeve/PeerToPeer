@@ -11,8 +11,10 @@ import com.thoughtworks.xstream.io.xml.StaxDriver;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.Inet4Address;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -40,9 +42,17 @@ public class ContactResolve extends Thread {
 
     }
 
-    public ContactResolve(ServiceDiscovery producer, GuiUpdater updater) {
+    public ContactResolve(ServiceDiscovery producer, GuiUpdater updater,String username) {
+        
+        String selfip = null;
+        
+        try {
+            selfip = Inet4Address.getLocalHost().getHostAddress();
+        } catch (UnknownHostException ex) {
+            Logger.getLogger(ContactResolve.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
-        self = new Contact("asd", "192.168.1.2");   //get from gui
+        self = new Contact(username, selfip);   //get from gui
         this.producer = producer;
         this.updater = updater;
 
