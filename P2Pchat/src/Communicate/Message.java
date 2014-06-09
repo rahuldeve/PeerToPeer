@@ -12,9 +12,9 @@ package Communicate;
  */
 public class Message {
     
-    String content;
-    String to;
-    String from;
+    public String content;
+    public String to;
+    public String from;
     
     public Message(String msg, String to,String from){
         this.content = msg;

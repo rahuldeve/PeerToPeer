@@ -40,6 +40,7 @@ public class ContentView extends javax.swing.JPanel {
     MessageStorage history;
 
     public static Contact self;
+    
 
     public ContentView() {
         initComponents();
@@ -58,8 +59,14 @@ public class ContentView extends javax.swing.JPanel {
 
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
+                
 
-                String message = (String) evt.getNewValue();
+               Message message = (Message) evt.getNewValue();
+               String previous = history.getUserConversation(message.from);
+               history.storeUserConversation(message.from,previous+message.content+"\n");
+               
+              
+           
                 
 
                 //intext.setText(intext.getText() + "\n" + message);
