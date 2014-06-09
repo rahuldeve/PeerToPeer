@@ -40,14 +40,14 @@ public class ContentView extends javax.swing.JPanel {
     MessageStorage history;
 
     public static Contact self;
-    
 
     public ContentView() {
         initComponents();
+        history = new MessageStorage();
     }
 
     public static void setSelf(String uname, String ipaddr) {
-        self = new Contact(ipaddr, uname);
+        self = new Contact(uname, ipaddr);
     }
 
     public final void initInputServer() {
@@ -59,17 +59,17 @@ public class ContentView extends javax.swing.JPanel {
 
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
-                
 
-               Message message = (Message) evt.getNewValue();
-               String previous = history.getUserConversation(message.from);
-               history.storeUserConversation(message.from,previous+message.content+"\n");
-               
-              
-           
-                
+                Message message = (Message) evt.getNewValue();
+                String previous = history.getUserConversation(message.from);
+                history.storeUserConversation(message.from, previous + message.content + "\n");
 
-                //intext.setText(intext.getText() + "\n" + message);
+                String selected = contactlist.getSelectedValue().toString();
+
+                if (selected.equals(message.from)) {
+                    recivedFeild.setText(history.getUserConversation(message.from));
+                }
+
             }
         });
 
@@ -99,9 +99,9 @@ public class ContentView extends javax.swing.JPanel {
 
                 while (iter.hasNext()) {
 
-                    //System.out.println(iter.next());
-                    //Contact temp =(Contact) iter.next();
-                    model.addElement(iter.next().getName());
+                    Contact q = iter.next();
+                    model.addElement(q.getName());
+                    history.storeUserConversation(q.getName(), "");
                     contactlist.setModel(model);
 
                 }
@@ -117,9 +117,11 @@ public class ContentView extends javax.swing.JPanel {
         String temp = contactlist.getSelectedValue().toString();
         Contact w = contactmap.get(temp);
 
-        String from = testgiu.self.getName();
+        String from = Gui.ContentView.self.getName();
         String to = w.getIp();
         String content = messageFeild.getText();
+
+        //sent text is appendded to the recived text
         Message message = new Message(content, to, from);
         OutputHandler handler = new OutputHandler();
         handler.sendMessage(message);
@@ -127,7 +129,7 @@ public class ContentView extends javax.swing.JPanel {
     }
 
     public void startup() {
-        
+
         initDiscovery();
         initInputServer();
 
@@ -145,13 +147,12 @@ public class ContentView extends javax.swing.JPanel {
 
     public void shutdown() {
 
-
         inputserver.shutdown();
         serviceregistery.shutdown();
         servicediscovery.shutdown();
+        resolver.shutdown();
     }
-    
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -219,27 +220,27 @@ public class ContentView extends javax.swing.JPanel {
 
     private void contactlistMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_contactlistMouseClicked
         // TODO add your handling code here:
-        
+
         String user = contactlist.getSelectedValue().toString();
-        
+
         String content = history.getUserConversation(user);
         recivedFeild.setText(content);
-        
+
     }//GEN-LAST:event_contactlistMouseClicked
 
     private void sendButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_sendButtonMouseClicked
         // TODO add your handling code here:
-        
+
         String temp = contactlist.getSelectedValue().toString();
         Contact w = contactmap.get(temp);
 
-        String from = testgiu.self.getName();
+        String from = Gui.ContentView.self.getName();
         String to = w.getIp();
         String content = messageFeild.getText();
         Message message = new Message(content, to, from);
         OutputHandler handler = new OutputHandler();
         handler.sendMessage(message);
-        
+
     }//GEN-LAST:event_sendButtonMouseClicked
 
 

@@ -35,17 +35,13 @@ public class ContactResolve implements Runnable {
     GuiUpdater updater;
     ServiceDiscovery producer;
     HashMap<String, Contact> contacts = new HashMap<>();
+    boolean run;
 
-    public ContactResolve(ServiceDiscovery producer) {
-
-        self = new Contact("asd", "192.168.1.2");   //get from gui
-        this.producer = producer;
-
-    }
-
+    
     public ContactResolve(ServiceDiscovery producer, GuiUpdater updater,String username) {
         
         String selfip = null;
+        run = true;
         
         try {
             selfip = Inet4Address.getLocalHost().getHostAddress();
@@ -53,7 +49,8 @@ public class ContactResolve implements Runnable {
             Logger.getLogger(ContactResolve.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        self = new Contact(username, selfip);   //get from gui
+        //self = new Contact(username, selfip);   //get from gui
+        self = Gui.ContentView.self;
         this.producer = producer;
         this.updater = updater;
 
@@ -102,7 +99,7 @@ public class ContactResolve implements Runnable {
 
         ServerSocket ss = new ServerSocket(6666);
 
-        while (true) {
+        while (run) {
             Socket s = ss.accept();
 
             XStream xs = new XStream(new StaxDriver());
@@ -112,6 +109,10 @@ public class ContactResolve implements Runnable {
             out.close();
 
         }
+        
+        ss.close();
+        
+        
 
     }
 
@@ -133,6 +134,10 @@ public class ContactResolve implements Runnable {
         }
         
     }
+    
+    public void shutdown(){
+        run = false;
+    }
 
     @Override
     public void run() {
@@ -141,7 +146,7 @@ public class ContactResolve implements Runnable {
             @Override
             public void run() {
 
-                while (true) {
+                while (run) {
                     try {
 
                         sendDetails();
@@ -155,7 +160,7 @@ public class ContactResolve implements Runnable {
 
         sendDetailsthread.start();
 
-        while (true) {
+        while (run) {
 
             String mess = producer.getEvent();
             if (mess != null) {
