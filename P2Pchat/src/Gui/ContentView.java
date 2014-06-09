@@ -147,7 +147,8 @@ public class ContentView extends javax.swing.JPanel {
         servicediscovery.shutdown();
 
     }
-
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -165,6 +166,11 @@ public class ContentView extends javax.swing.JPanel {
         contactlist = new javax.swing.JList();
 
         sendButton.setText("Send");
+        sendButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                sendButtonMouseClicked(evt);
+            }
+        });
 
         recivedFeild.setColumns(20);
         recivedFeild.setRows(5);
@@ -174,6 +180,11 @@ public class ContentView extends javax.swing.JPanel {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
+        });
+        contactlist.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                contactlistMouseClicked(evt);
+            }
         });
         jScrollPane2.setViewportView(contactlist);
 
@@ -202,6 +213,31 @@ public class ContentView extends javax.swing.JPanel {
                     .addComponent(messageBox, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void contactlistMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_contactlistMouseClicked
+        // TODO add your handling code here:
+        
+        String user = contactlist.getSelectedValue().toString();
+        
+        String content = history.getUserConversation(user);
+        recivedFeild.setText(content);
+        
+    }//GEN-LAST:event_contactlistMouseClicked
+
+    private void sendButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_sendButtonMouseClicked
+        // TODO add your handling code here:
+        
+        String temp = contactlist.getSelectedValue().toString();
+        Contact w = contactmap.get(temp);
+
+        String from = testgiu.self.getName();
+        String to = w.getIp();
+        String content = sendtext.getText();
+        Message message = new Message(content, to, from);
+        OutputHandler handler = new OutputHandler();
+        handler.sendMessage(message);
+        
+    }//GEN-LAST:event_sendButtonMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
