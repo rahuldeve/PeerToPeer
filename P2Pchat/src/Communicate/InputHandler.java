@@ -37,7 +37,7 @@ public class InputHandler extends ChannelInboundHandlerAdapter {
         Message message = (Message) xs.fromXML(xml);
 
         //send to gui
-        updater.updategui(message.from+" : " + message.content);
+        updater.updategui(message.from+" : " + message);
 
     }
 

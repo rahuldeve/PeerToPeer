@@ -17,7 +17,7 @@ import javax.jmdns.ServiceListener;
  *
  * @author Other
  */
-public class ServiceDiscovery extends Thread {
+public class ServiceDiscovery implements Runnable {
 
     private final String type = "_chat._tcp.local.";
     private JmDNS jmdns = null;

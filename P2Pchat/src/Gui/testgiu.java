@@ -53,7 +53,7 @@ public class testgiu extends javax.swing.JFrame {
         self = new Contact("asd", "192.168.1.2");
     }
 
-    public void initInputServer() {
+    public final void initInputServer() {
 
         updater = new GuiUpdater();
         inputserver = new InputServer(8080, updater);
@@ -71,7 +71,7 @@ public class testgiu extends javax.swing.JFrame {
 
     }
 
-    public void initDiscovery() {
+    public final void initDiscovery() {
 
         updater = new GuiUpdater();
 
@@ -225,9 +225,9 @@ public class testgiu extends javax.swing.JFrame {
             Thread inputServerThread = new Thread(inputserver);
             inputServerThread.start();
 
-            serviceregisterthread.start();
+            /*serviceregisterthread.start();
             servicediscoverythread.start();
-            resolver.start();
+            resolver.start();*/
 
         } else {
             Switch.setText("OFF");

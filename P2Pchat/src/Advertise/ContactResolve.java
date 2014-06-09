@@ -11,6 +11,7 @@ import com.thoughtworks.xstream.io.xml.StaxDriver;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import static java.lang.Thread.sleep;
 import java.net.Inet4Address;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -27,7 +28,7 @@ import javax.xml.bind.JAXBException;
  *
  * @author Other
  */
-public class ContactResolve extends Thread {
+public class ContactResolve implements Runnable {
 
     //CONSUMER
     Contact self;

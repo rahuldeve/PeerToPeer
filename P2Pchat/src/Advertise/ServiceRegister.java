@@ -15,7 +15,7 @@ import javax.jmdns.ServiceInfo;
  *
  * @author Other
  */
-public class ServiceRegister extends Thread {
+public class ServiceRegister implements Runnable{
 
     private JmDNS mdnsServer = null;
 
