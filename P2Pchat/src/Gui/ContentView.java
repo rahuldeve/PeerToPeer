@@ -119,7 +119,7 @@ public class ContentView extends javax.swing.JPanel {
 
         String from = testgiu.self.getName();
         String to = w.getIp();
-        String content = messageBox.getText();
+        String content = messageFeild.getText();
         Message message = new Message(content, to, from);
         OutputHandler handler = new OutputHandler();
         handler.sendMessage(message);
@@ -127,6 +127,9 @@ public class ContentView extends javax.swing.JPanel {
     }
 
     public void startup() {
+        
+        initDiscovery();
+        initInputServer();
 
         Thread inputServerThread = new Thread(inputserver);
         Thread serviceRegisteryThread = new Thread(serviceregistery);
@@ -142,10 +145,10 @@ public class ContentView extends javax.swing.JPanel {
 
     public void shutdown() {
 
+
         inputserver.shutdown();
         serviceregistery.shutdown();
         servicediscovery.shutdown();
-
     }
     
     
@@ -158,7 +161,7 @@ public class ContentView extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        messageBox = new javax.swing.JTextField();
+        messageFeild = new javax.swing.JTextField();
         sendButton = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         recivedFeild = new javax.swing.JTextArea();
@@ -195,7 +198,7 @@ public class ContentView extends javax.swing.JPanel {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(messageBox, javax.swing.GroupLayout.DEFAULT_SIZE, 335, Short.MAX_VALUE))
+                    .addComponent(messageFeild, javax.swing.GroupLayout.DEFAULT_SIZE, 335, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(sendButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -210,7 +213,7 @@ public class ContentView extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(sendButton)
-                    .addComponent(messageBox, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(messageFeild, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -232,7 +235,7 @@ public class ContentView extends javax.swing.JPanel {
 
         String from = testgiu.self.getName();
         String to = w.getIp();
-        String content = sendtext.getText();
+        String content = messageFeild.getText();
         Message message = new Message(content, to, from);
         OutputHandler handler = new OutputHandler();
         handler.sendMessage(message);
@@ -244,7 +247,7 @@ public class ContentView extends javax.swing.JPanel {
     private javax.swing.JList contactlist;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextField messageBox;
+    private javax.swing.JTextField messageFeild;
     private javax.swing.JTextArea recivedFeild;
     private javax.swing.JButton sendButton;
     // End of variables declaration//GEN-END:variables
