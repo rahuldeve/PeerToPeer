@@ -6,6 +6,7 @@
 package Advertise;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.jmdns.JmDNS;
@@ -33,7 +34,7 @@ public class ServiceRegister implements Runnable{
        // ServiceRegister registerer = new ServiceRegister();
         try {
 
-            mdnsServer = JmDNS.create();
+            mdnsServer = JmDNS.create(InetAddress.getLocalHost());
             ServiceInfo testService = ServiceInfo.create("_chat._tcp.local.", "Test Service", 6666, "test service");
             mdnsServer.registerService(testService);
             System.out.println("registered service as _workstation._tcp.local.");

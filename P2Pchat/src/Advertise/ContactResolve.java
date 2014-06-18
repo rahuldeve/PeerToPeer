@@ -35,13 +35,14 @@ public class ContactResolve implements Runnable {
     GuiUpdater updater;
     ServiceDiscovery producer;
     HashMap<String, Contact> contacts = new HashMap<>();
-    boolean run;
+    private static boolean run;
+    ServerSocket ss;
 
     
     public ContactResolve(ServiceDiscovery producer, GuiUpdater updater,String username) {
         
         String selfip = null;
-        run = true;
+        
         
         try {
             selfip = Inet4Address.getLocalHost().getHostAddress();
@@ -97,9 +98,9 @@ public class ContactResolve implements Runnable {
 
     public void sendDetails() throws IOException, JAXBException {
 
-        ServerSocket ss = new ServerSocket(6666);
+        ss = new ServerSocket(6666);
 
-        while (run) {
+        while (true) {
             Socket s = ss.accept();
 
             XStream xs = new XStream(new StaxDriver());
@@ -107,10 +108,13 @@ public class ContactResolve implements Runnable {
 
             out.writeObject(this.self);
             out.close();
+            s.close();
 
         }
         
-        ss.close();
+        
+        
+        
         
         
 
@@ -136,7 +140,8 @@ public class ContactResolve implements Runnable {
     }
     
     public void shutdown(){
-        run = false;
+        Advertise.ContactResolve.run = false;
+        
     }
 
     @Override
@@ -146,7 +151,7 @@ public class ContactResolve implements Runnable {
             @Override
             public void run() {
 
-                while (run) {
+                while (true) {
                     try {
 
                         sendDetails();
@@ -160,7 +165,7 @@ public class ContactResolve implements Runnable {
 
         sendDetailsthread.start();
 
-        while (run) {
+        while (true) {
 
             String mess = producer.getEvent();
             if (mess != null) {

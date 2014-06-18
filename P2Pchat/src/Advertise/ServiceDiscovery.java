@@ -6,6 +6,7 @@
 package Advertise;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.jmdns.JmDNS;
@@ -61,7 +62,7 @@ public class ServiceDiscovery implements Runnable {
     public void run() {
 
         try {
-            jmdns = JmDNS.create();
+            jmdns = JmDNS.create(InetAddress.getLocalHost());
             jmdns.addServiceListener(type, listener = new ServiceListener() {
 
                 @Override
@@ -72,7 +73,7 @@ public class ServiceDiscovery implements Runnable {
                         additions = ev.getInfo().getInetAddresses()[0].getHostAddress();
                         System.out.println("Service resolved: " + ev.getInfo().getQualifiedName() + " port:" + ev.getInfo().getPort() + " " + additions);
                         setEvent("1"+additions);
-                        System.out.println(additions);
+                        //System.out.println(additions);
                     }
                 }
 
