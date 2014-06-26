@@ -19,16 +19,12 @@ import java.util.logging.Logger;
  */
 public class OutputHandler {
 
-    //run it under a swing worker
     public void sendMessage(Message message) {
 
         try {
 
-            //TODO: use netty for sending data and use an encoder for encoding the message
-            
             Socket s = new Socket(message.to, 8080);
             
-            //xml messages?
             XStream xs = new XStream(new StaxDriver());
             String xml = xs.toXML(message);
             

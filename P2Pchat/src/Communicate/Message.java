@@ -12,6 +12,10 @@ package Communicate;
  */
 public class Message {
     
+    //diff approach
+    //use blank messages to establish initial contact
+    //use netty to handle all input and output
+    
     public String content;
     public String to;
     public String from;

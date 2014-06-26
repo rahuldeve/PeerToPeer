@@ -71,19 +71,15 @@ public class ContactResolve implements Runnable {
             updater.updategui(contacts);
         }
 
-        System.out.println("inside func");
 
-        //yes? then set as online and change the ip
-        //else adds new contact to list
     }
 
     public void establishConnection(String ipaddr) {
 
         try {
-            //socket connect
+            
             Socket s = new Socket(ipaddr, 6666);
             System.out.println("established" + ipaddr);
-            //keep 6666 as port for resolving?
 
             XStream xs = new XStream(new StaxDriver());
             ObjectInputStream in = xs.createObjectInputStream(s.getInputStream());
@@ -151,7 +147,6 @@ public class ContactResolve implements Runnable {
             @Override
             public void run() {
 
-                while (true) {
                     try {
 
                         sendDetails();
@@ -159,7 +154,6 @@ public class ContactResolve implements Runnable {
                     } catch (IOException | JAXBException ex) {
                         Logger.getLogger(ContactResolve.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                }
             }
         });
 
