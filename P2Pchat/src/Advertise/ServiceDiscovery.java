@@ -26,6 +26,8 @@ public class ServiceDiscovery implements Runnable {
     private ServiceInfo serviceInfo;
     boolean old;
     String additions;//use queue later
+    
+    //try using a bean?
 
     public ServiceDiscovery() {
         old = true;
@@ -82,6 +84,7 @@ public class ServiceDiscovery implements Runnable {
                     System.out.println("Service removed: " + ev.getName());
 
                     //notify as offline
+                    //dosent seem to work
                     String ipaddr = ev.getInfo().getInetAddresses()[0].getHostAddress();
                     setEvent("0"+ipaddr);
                     //resolver.setOffline(ev.getInfo().getInetAddresses()[0].getHostAddress());

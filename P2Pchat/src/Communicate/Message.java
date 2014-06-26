@@ -18,7 +18,9 @@ public class Message {
     
     public String content;
     public String to;
+    public String toIpaddr;
     public String from;
+    public String fromIpaddr;
     
     public Message(String msg, String to,String from){
         this.content = msg;
