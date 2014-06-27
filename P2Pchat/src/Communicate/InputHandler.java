@@ -40,8 +40,8 @@ public class InputHandler extends ChannelInboundHandlerAdapter {
         updater.updategui(message);
         
         //new additiion
-        MessageResolver resolver = new MessageResolver(message);
-        resolver.resolveMessage();
+        MessageHandler handler = new MessageHandler(message);
+        handler.resolveMessage();
 
     }
 

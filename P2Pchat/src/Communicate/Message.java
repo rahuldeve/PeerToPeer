@@ -15,12 +15,12 @@ public class Message {
     //diff approach
     //use blank messages to establish initial contact
     //use netty to handle all input and output
-    
+    public static int TYPE_CONTACT  = 1;
+    public static int TYPE_MESSAGE = 2;
     public String content;
     public String to;
-    public String toIpaddr;
     public String from;
-    public String fromIpaddr;
+    public int msgType;
     
     public Message(String msg, String to,String from){
         this.content = msg;
@@ -28,4 +28,11 @@ public class Message {
         this.from = from;
     }
     
+    public Message(String msg, String to,String from, int msgType){
+        this.content = msg;
+        this.to = to;
+        this.from = from;
+        this.msgType = msgType;
+    }
+      
 }
