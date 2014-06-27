@@ -21,10 +21,13 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 @Sharable
 public class InputHandler extends ChannelInboundHandlerAdapter {
 
-    public GuiUpdater updater;
+    GuiUpdater updater;
+    MessageHandler handler;
 
     public InputHandler(GuiUpdater updater) {
+        
         this.updater = updater;
+        handler = new MessageHandler(updater);
     }
 
     @Override
@@ -40,8 +43,7 @@ public class InputHandler extends ChannelInboundHandlerAdapter {
         updater.updategui(message);
         
         //new additiion
-        MessageHandler handler = new MessageHandler(message);
-        handler.resolveMessage();
+        handler.resolveMessage(message);
 
     }
 

@@ -6,6 +6,8 @@
 
 package Communicate;
 
+import Gui.GuiUpdater;
+
 /**
  *
  * @author rahul dev e
@@ -13,18 +15,19 @@ package Communicate;
 public class MessageHandler {
     
     Message message;
+    GuiUpdater updater;
     
-    public MessageHandler(Message message){
-        this.message = message;
-        
+    public MessageHandler(GuiUpdater updater){
+        this.updater = updater;
     }
     
-    public void resolveMessage(){
+    public void resolveMessage(Message message){
         
-        if(message.content.isEmpty()){
+        if(message.msgType==Message.TYPE_CONTACT){
             //resolve contact
         }else{
             //send to gui
+           updater.updategui(message);
         }
         
     }
