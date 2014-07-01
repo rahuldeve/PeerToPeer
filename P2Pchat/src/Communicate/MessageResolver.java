@@ -10,11 +10,11 @@ package Communicate;
  *
  * @author rahul dev e
  */
-public class MessageHandler {
+public class MessageResolver {
     
     Message message;
     
-    public MessageHandler(Message message){
+    public MessageResolver(Message message){
         this.message = message;
         
     }
