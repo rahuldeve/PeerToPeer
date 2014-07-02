@@ -11,7 +11,7 @@ import Advertise.ServiceDiscovery;
 import Advertise.ServiceRegister;
 import Communicate.InputServer;
 import Communicate.Message;
-import Communicate.OutputHandler;
+import Communicate.OutputServerHandler;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
@@ -123,7 +123,7 @@ public class ContentView extends javax.swing.JPanel {
 
         //sent text is appendded to the recived text
         Message message = new Message(content, to, from);
-        OutputHandler handler = new OutputHandler();
+        OutputServerHandler handler = new OutputServerHandler();
         handler.sendMessage(message);
 
     }
@@ -238,7 +238,7 @@ public class ContentView extends javax.swing.JPanel {
         String to = w.getIp();
         String content = messageFeild.getText();
         Message message = new Message(content, to, from);
-        OutputHandler handler = new OutputHandler();
+        OutputServerHandler handler = new OutputServerHandler();
         handler.sendMessage(message);
 
     }//GEN-LAST:event_sendButtonMouseClicked

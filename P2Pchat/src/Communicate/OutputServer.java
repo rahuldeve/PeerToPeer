@@ -10,6 +10,6 @@ package Communicate;
  *
  * @author rahul dev e
  */
-public class InputServer {
+public class OutputServer {
     
 }
