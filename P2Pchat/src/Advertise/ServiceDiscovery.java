@@ -75,7 +75,7 @@ public class ServiceDiscovery implements Runnable {
                         additions = ev.getInfo().getInetAddresses()[0].getHostAddress();
                         System.out.println("Service resolved: " + ev.getInfo().getQualifiedName() + " port:" + ev.getInfo().getPort() + " " + additions);
                         setEvent("1"+additions);
-                        //System.out.println(additions);
+                        //somehow pass ipaddr to output server for binding
                     }
                 }
 

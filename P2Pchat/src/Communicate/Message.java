@@ -22,17 +22,12 @@ public class Message {
     public String from;
     public int msgType;
     
-    public Message(String msg, String to,String from){
-        this.content = msg;
-        this.to = to;
-        this.from = from;
-    }
     
-    public Message(String msg, String to,String from, int msgType){
-        this.content = msg;
+    public Message(String content, String to,String from,int msgType){
+        this.content = content;
         this.to = to;
         this.from = from;
         this.msgType = msgType;
     }
-      
+        
 }
