@@ -25,13 +25,25 @@ public class Node {
     ServiceDiscovery servicediscovery;
     ServiceRegister serviceregister;
     
-    public static Message self;
+    static Message self;
     
-    
-    public static void setSelf(String name,String ipaddr){
-        
-        
+    public Node(){
         
     }
     
+    public void init(){
+        
+    }
+    
+    public static void setSelf(){
+        
+    }
+    
+    public static Message getSelf(){
+        
+        return self;
+    
+}
+    
+     
 }

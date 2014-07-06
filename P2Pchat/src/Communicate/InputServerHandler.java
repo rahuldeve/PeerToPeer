@@ -6,6 +6,7 @@
 
 package Communicate;
 
+import Gui.Guiupdate;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.StaxDriver;
 import io.netty.channel.ChannelHandlerContext;
@@ -17,13 +18,19 @@ import io.netty.channel.SimpleChannelInboundHandler;
  */
 public class InputServerHandler extends SimpleChannelInboundHandler<String> {
     
+    Guiupdate updater;
+    
+    public InputServerHandler(){
+        this.updater = Gui.test.updater;
+    }
+    
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         
         
         // inititate handshake
         // get self from node
-        Message self = Core.Node.self;
+        Message self = Core.Node.getSelf();
         
         XStream xs = new XStream(new StaxDriver());
         String xml  = xs.toXML(self);
@@ -64,6 +71,7 @@ public class InputServerHandler extends SimpleChannelInboundHandler<String> {
             }else{
                 
                 //send it to gui
+                updater.updateGui(message);
                 
             }
             

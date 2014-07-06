@@ -6,6 +6,7 @@
 
 package Communicate;
 
+import Gui.Guiupdate;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
@@ -24,8 +25,7 @@ public class InputServerInitializer extends ChannelInitializer<SocketChannel> {
     private static final StringEncoder ENCODER = new StringEncoder();
 
     private static final InputServerHandler SERVER_HANDLER = new InputServerHandler();
-
-
+    
     @Override
     protected void initChannel(SocketChannel ch) throws Exception {
         

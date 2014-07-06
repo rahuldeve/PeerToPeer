@@ -19,8 +19,7 @@ public class GuiUpdater {
 
     public void updategui(Object msg) {
 
-        String old;
-        old = "asdf";
+        String old="old";
         System.out.println("updating gui");
         pChange.firePropertyChange(MESSAGE, old, msg);
 

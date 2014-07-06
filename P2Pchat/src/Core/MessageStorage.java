@@ -29,5 +29,9 @@ public class MessageStorage {
     public void storeUserConversation(String usernme, String conversation) {
         history.putIfAbsent(usernme, conversation);
     }
+    
+    public void  addUser(String username){
+        history.put(username, "");
+    }
 
 }
