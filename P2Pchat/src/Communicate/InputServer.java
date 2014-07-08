@@ -6,6 +6,8 @@
 
 package Communicate;
 
+import Core.MessageNotifier;
+import Gui.GuiUpdate;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -17,18 +19,21 @@ import java.util.logging.Logger;
  *
  * @author rahul dev e
  */
-public class InputServer {
+public class InputServer extends Thread {
     
     static final int PORT = 8080;
     
     EventLoopGroup bossGroup;
     EventLoopGroup workerGroup;
     
-    public InputServer(){
-        
+    MessageNotifier notifier;
+    
+    public InputServer(MessageNotifier notifier){
+        this.notifier = notifier;
     }
     
-    public void start(){
+    @Override
+    public void run(){
         
         bossGroup = new NioEventLoopGroup(1);
         workerGroup = new NioEventLoopGroup();
@@ -38,7 +43,7 @@ public class InputServer {
             b.group(bossGroup, workerGroup)
              .channel(NioServerSocketChannel.class)
              //.handler(new LoggingHandler(LogLevel.INFO))
-             .childHandler(new InputServerInitializer());
+             .childHandler(new InputServerInitializer(notifier));
 
             b.bind(PORT).sync().channel().closeFuture().sync();
             

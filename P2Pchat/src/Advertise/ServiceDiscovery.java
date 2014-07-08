@@ -5,6 +5,7 @@
  */
 package Advertise;
 
+import Communicate.ServiceNotifier;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.util.logging.Level;
@@ -26,35 +27,14 @@ public class ServiceDiscovery implements Runnable {
     private ServiceInfo serviceInfo;
     boolean old;
     String additions;//use queue later
+    ServiceNotifier notifier;
     
-    //try using a bean?
 
-    public ServiceDiscovery() {
+    public ServiceDiscovery(ServiceNotifier notifier) {
+        this.notifier = notifier;
         old = true;
     }
 
-    //PRODUCER
-    public synchronized void setEvent(String ipaddr) {
-
-        additions = ipaddr;
-        old = false;
-        System.out.println(ipaddr);
-        notify();
-
-    }
-
-    //called by consumer
-    public synchronized String getEvent() {
-        if (old == false) {
-
-            old = true;
-            return additions;
-            
-        } else {
-            return null;
-        }
-
-    }
     
     public void shutdown(){
         jmdns.removeServiceListener(type, listener);
@@ -74,19 +54,18 @@ public class ServiceDiscovery implements Runnable {
                     if (ev.getInfo().getInetAddresses() != null && ev.getInfo().getInetAddresses().length > 0) {
                         additions = ev.getInfo().getInetAddresses()[0].getHostAddress();
                         System.out.println("Service resolved: " + ev.getInfo().getQualifiedName() + " port:" + ev.getInfo().getPort() + " " + additions);
-                        setEvent("1"+additions);
+                        notifier.setSampleProperty(additions);
                         //somehow pass ipaddr to output server for binding
                     }
                 }
 
                 @Override
                 public void serviceRemoved(ServiceEvent ev) {
+                    
+                    //might not be needed
                     System.out.println("Service removed: " + ev.getName());
 
-                    //notify as offline
-                    //dosent seem to work
                     String ipaddr = ev.getInfo().getInetAddresses()[0].getHostAddress();
-                    setEvent("0"+ipaddr);
                     //resolver.setOffline(ev.getInfo().getInetAddresses()[0].getHostAddress());
                 }
 

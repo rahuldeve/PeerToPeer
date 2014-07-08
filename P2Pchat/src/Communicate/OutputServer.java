@@ -13,6 +13,8 @@ import io.netty.channel.Channel;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,7 +23,7 @@ import java.util.logging.Logger;
  *
  * @author rahul dev e
  */
-public class OutputServer {
+public class OutputServer extends Thread {
     
     static final int PORT = 8080;
     
@@ -29,11 +31,15 @@ public class OutputServer {
     Bootstrap b;
     HashMap<String, Channel> channelMap;
     
-    public OutputServer(){
+    ServiceNotifier notifier;
+    
+    public OutputServer(ServiceNotifier notifier){
         
+        this.notifier = notifier;
     }
     
-    public void start(){
+    @Override
+    public void run(){
         
        group = new NioEventLoopGroup();
        
@@ -42,12 +48,24 @@ public class OutputServer {
          .channel(NioSocketChannel.class)
          .handler(new OutputServerInitializer());
        
+       notifier.addPropertyChangeListener(new PropertyChangeListener() {
+
+           @Override
+           public void propertyChange(PropertyChangeEvent evt) {
+               
+               String ipaddr = (String) evt.getNewValue();
+               initChannel(ipaddr);
+               
+           }
+       });
+       
     }
     
     public void initChannel(String ipaddr){
         
         try {
             
+            System.out.println("attempting to connect :"+ipaddr);
             Channel ch = b.connect(ipaddr, PORT).sync().channel();
             channelMap.putIfAbsent(ipaddr, ch);
             

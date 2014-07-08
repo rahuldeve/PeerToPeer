@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package Gui;
+package Core;
 
 import java.beans.*;
 import java.io.Serializable;
@@ -13,7 +13,7 @@ import java.io.Serializable;
  *
  * @author rahul dev e
  */
-public class GuiUpdate implements Serializable {
+public class MessageNotifier implements Serializable {
     
     public static final String PROP_SAMPLE_PROPERTY = "sampleProperty";
     
@@ -21,7 +21,7 @@ public class GuiUpdate implements Serializable {
     
     private PropertyChangeSupport propertySupport;
     
-    public GuiUpdate() {
+    public MessageNotifier() {
         propertySupport = new PropertyChangeSupport(this);
     }
     
@@ -29,8 +29,7 @@ public class GuiUpdate implements Serializable {
         return sampleProperty;
     }
     
-    //change type to message?
-    public void updateGui(Object value) {
+    public void notifyNewMessage(Object value) {
         Object oldValue = sampleProperty;
         sampleProperty = value;
         propertySupport.firePropertyChange(PROP_SAMPLE_PROPERTY, oldValue, sampleProperty);

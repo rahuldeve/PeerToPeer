@@ -6,7 +6,8 @@
 
 package Communicate;
 
-import Gui.Guiupdate;
+import Core.MessageNotifier;
+import Gui.GuiUpdate;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.StaxDriver;
 import io.netty.channel.ChannelHandlerContext;
@@ -18,10 +19,11 @@ import io.netty.channel.SimpleChannelInboundHandler;
  */
 public class InputServerHandler extends SimpleChannelInboundHandler<String> {
     
-    Guiupdate updater;
+    MessageNotifier notifier;
     
-    public InputServerHandler(){
-        this.updater = Gui.test.updater;
+    public InputServerHandler(MessageNotifier notifier){
+        this.notifier = notifier;
+        
     }
     
     @Override
@@ -35,7 +37,7 @@ public class InputServerHandler extends SimpleChannelInboundHandler<String> {
         XStream xs = new XStream(new StaxDriver());
         String xml  = xs.toXML(self);
         
-        
+        System.out.println("sending first handshake: "+xml);
         ctx.write(xml+"\r\n");
         ctx.flush();
         
@@ -64,16 +66,7 @@ public class InputServerHandler extends SimpleChannelInboundHandler<String> {
             XStream xs = new XStream(new StaxDriver());
             Message message = (Message)xs.fromXML(msg);
             
-            if(message.msgType==Message.TYPE_CONTACT){
-                
-                //save contact in message storage
-                
-            }else{
-                
-                //send it to gui
-                updater.updateGui(message);
-                
-            }
+            notifier.notifyNewMessage(msg);
             
         }
         

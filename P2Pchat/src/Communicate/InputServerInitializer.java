@@ -6,7 +6,8 @@
 
 package Communicate;
 
-import Gui.Guiupdate;
+import Core.MessageNotifier;
+import Gui.GuiUpdate;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
@@ -23,8 +24,15 @@ public class InputServerInitializer extends ChannelInitializer<SocketChannel> {
     
     private static final StringDecoder DECODER = new StringDecoder();
     private static final StringEncoder ENCODER = new StringEncoder();
+    
 
-    private static final InputServerHandler SERVER_HANDLER = new InputServerHandler();
+    private static InputServerHandler SERVER_HANDLER;
+    
+    public InputServerInitializer(MessageNotifier notifier){
+        
+        SERVER_HANDLER = new InputServerHandler(notifier);
+        
+    }
     
     @Override
     protected void initChannel(SocketChannel ch) throws Exception {

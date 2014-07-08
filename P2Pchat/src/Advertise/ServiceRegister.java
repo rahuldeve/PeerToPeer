@@ -31,7 +31,6 @@ public class ServiceRegister implements Runnable{
     @Override
     public void run() {
 
-       // ServiceRegister registerer = new ServiceRegister();
         try {
 
             mdnsServer = JmDNS.create(InetAddress.getLocalHost());

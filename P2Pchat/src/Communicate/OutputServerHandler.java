@@ -6,7 +6,7 @@
 
 package Communicate;
 
-import Gui.Guiupdate;
+import Gui.GuiUpdate;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.StaxDriver;
 import io.netty.channel.ChannelHandlerContext;
@@ -30,6 +30,7 @@ public class OutputServerHandler extends SimpleChannelInboundHandler<String> {
             Message self = Core.Node.getSelf();
             String xml = xs.toXML(self);
             
+            System.out.println("sending second handshake: "+ xml);
             ctx.writeAndFlush(xml+"\r\n");
             
         }
