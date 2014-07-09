@@ -5,7 +5,9 @@
         <group>
             <file>file:/C:/Users/rahul%20dev%20e/Documents/GitHub/PeerToPeer/P2Pchat/src/Gui/test.java</file>
             <file>file:/C:/Users/rahul%20dev%20e/Documents/GitHub/PeerToPeer/P2Pchat/src/Gui/GuiUpdate.java</file>
+            <file>file:/C:/Users/rahul%20dev%20e/Documents/GitHub/PeerToPeer/P2Pchat/src/Core/MessageNotifier.java</file>
             <file>file:/C:/Users/rahul%20dev%20e/Documents/GitHub/PeerToPeer/P2Pchat/src/Core/Node.java</file>
+            <file>file:/C:/Users/rahul%20dev%20e/Documents/GitHub/PeerToPeer/P2Pchat/src/Core/MessageStorage.java</file>
         </group>
     </open-files>
 </project-private>

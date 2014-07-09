@@ -7,9 +7,11 @@
 package Gui;
 
 import Communicate.Message;
+import Core.MessageStorage;
 import Core.Node;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import javax.swing.DefaultListModel;
 
 /**
  *
@@ -24,12 +26,17 @@ public class test extends javax.swing.JFrame {
     Node node;
     public GuiUpdate updater;
     
+    MessageStorage storage;
+    
     public test() {
+        
         initComponents();
         updater = new GuiUpdate();
         node = new Node(updater);
         node.init();
         init();
+        
+        this.storage = node.getStorage();
         
     }
     
@@ -40,12 +47,8 @@ public class test extends javax.swing.JFrame {
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
                 
-                Message message = (Message) evt.getNewValue();
-                
-                if(message.msgType == Message.TYPE_CONTACT){
-                    
-                    //update contact list
-                }
+                DefaultListModel model = (DefaultListModel) evt.getNewValue();
+                contactList.setModel(model);
                 
             }
         });

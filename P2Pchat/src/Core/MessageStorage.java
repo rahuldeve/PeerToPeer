@@ -6,6 +6,7 @@
 package Core;
 
 import java.util.HashMap;
+import javax.swing.DefaultListModel;
 
 /**
  *
@@ -14,9 +15,11 @@ import java.util.HashMap;
 public class MessageStorage {
 
     HashMap<String, String> history;
+    DefaultListModel<String> userList;
 
     public MessageStorage() {
         history = new HashMap<>();
+        userList = new DefaultListModel<>();
     }
 
     public String getUserCnversation(String username) {
@@ -27,11 +30,15 @@ public class MessageStorage {
     }
 
     public void storeUserConversation(String usernme, String conversation) {
-        history.putIfAbsent(usernme, conversation);
+        history.putIfAbsent(usernme, conversation);      
     }
     
-    public void  addUser(String username){
+    public DefaultListModel  addUser(String username){
         history.put(username, "");
+        userList.addElement(username);
+        return userList;
     }
+    
+    
 
 }

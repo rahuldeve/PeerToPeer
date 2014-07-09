@@ -66,7 +66,7 @@ public class InputServerHandler extends SimpleChannelInboundHandler<String> {
             XStream xs = new XStream(new StaxDriver());
             Message message = (Message)xs.fromXML(msg);
             
-            notifier.notifyNewMessage(msg);
+            notifier.notifyNewMessage(message);
             
         }
         

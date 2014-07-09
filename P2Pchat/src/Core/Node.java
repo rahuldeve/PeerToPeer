@@ -52,6 +52,20 @@ public class Node {
         
     }
     
+    public MessageStorage getStorage(){
+        return this.storage;
+    }
+    
+    public static void setSelf(String username){
+        
+        self = new Message(username,null, "localhost", Message.TYPE_CONTACT);
+        
+    }
+    
+    public static Message getSelf(){
+        return self;
+}
+    
     public void init(){
         
         messageNotifier.addPropertyChangeListener(new PropertyChangeListener() {
@@ -64,19 +78,15 @@ public class Node {
                 if(message.msgType==Message.TYPE_CONTACT){
                     
                     //message storage
-                    storage.addUser(message.content);
+                    Object temp = storage.addUser(message.content);
                     
                     //update ui
-                    
+                    updater.updateGui(temp);
                     
                 }else{
                     
-                    //send to gui
+                    //store it in message storege
                     storage.storeUserConversation(message.from, message.content);
-                    
-                    //ipdate ui
-                    
-                    
                 }
                 
                 
@@ -95,13 +105,7 @@ public class Node {
         
     }
     
-    public static void setSelf(){
-        
-    }
     
-    public static Message getSelf(){
-        return self;
-}
     
     public void shutdown(){
         
