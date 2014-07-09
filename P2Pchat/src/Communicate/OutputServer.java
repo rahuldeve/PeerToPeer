@@ -15,7 +15,11 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.function.BiConsumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -89,6 +93,21 @@ public class OutputServer extends Thread {
     }
     
     public void shutdown(){
+        
+        //get each channels
+        Channel ch = null;
+        
+        //send shutdownsignal
+        Message logoutmessage = new Message(Core.Node.getSelf().content, null, Core.Node.getSelf().from, Message.TYPE_LOGOFF);
+        XStream xs = new XStream(new StaxDriver());
+        String xml = xs.toXML(logoutmessage);
+        
+        ch.writeAndFlush(xml+"\r\n");
+        
+        //ch.closeFtutre.sync
+        ch.close();
+        
+        
         group.shutdownGracefully();
     }
     

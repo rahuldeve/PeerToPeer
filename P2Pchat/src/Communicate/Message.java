@@ -17,6 +17,7 @@ public class Message {
     //use netty to handle all input and output
     public static int TYPE_CONTACT  = 1;
     public static int TYPE_MESSAGE = 2;
+    public static int TYPE_LOGOFF = 3;
     public String content;
     public String to;
     public String from;

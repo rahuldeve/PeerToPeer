@@ -39,6 +39,13 @@ public class MessageStorage {
         return userList;
     }
     
+    public DefaultListModel setOffline(String username){
+        
+        userList.removeElement(username);
+        return userList;
+        
+    }
+    
     
 
 }

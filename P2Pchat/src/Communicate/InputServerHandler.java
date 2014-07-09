@@ -10,6 +10,8 @@ import Core.MessageNotifier;
 import Gui.GuiUpdate;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.StaxDriver;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
@@ -55,7 +57,7 @@ public class InputServerHandler extends SimpleChannelInboundHandler<String> {
     }
 
     @Override
-    protected void channelRead0(ChannelHandlerContext chc, String msg) throws Exception {
+    protected void channelRead0(ChannelHandlerContext ctx, String msg) throws Exception {
         
         if(msg.isEmpty()){
             
@@ -65,6 +67,12 @@ public class InputServerHandler extends SimpleChannelInboundHandler<String> {
             
             XStream xs = new XStream(new StaxDriver());
             Message message = (Message)xs.fromXML(msg);
+            
+            if(message.msgType==Message.TYPE_LOGOFF){
+                
+                ctx.close();
+                
+            }
             
             notifier.notifyNewMessage(message);
             
@@ -78,5 +86,5 @@ public class InputServerHandler extends SimpleChannelInboundHandler<String> {
         
         
     }
-    
+   
 }

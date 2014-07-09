@@ -83,10 +83,19 @@ public class Node {
                     //update ui
                     updater.updateGui(temp);
                     
-                }else{
+                }else if(message.msgType==Message.TYPE_MESSAGE){
                     
                     //store it in message storege
                     storage.storeUserConversation(message.from, message.content);
+                }else if (message.msgType==Message.TYPE_LOGOFF){
+                    
+                    //logoutsignal
+                    
+                    Object temp = storage.setOffline(message.content);
+                    updater.updateGui(temp);
+                    
+                }else{
+                    
                 }
                 
                 
