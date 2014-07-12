@@ -6,12 +6,10 @@
 
 package Communicate;
 
+import Core.Message;
 import Core.MessageNotifier;
-import Gui.GuiUpdate;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.StaxDriver;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 

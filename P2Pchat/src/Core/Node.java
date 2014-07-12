@@ -9,12 +9,15 @@ package Core;
 import Advertise.ServiceDiscovery;
 import Advertise.ServiceRegister;
 import Communicate.InputServer;
-import Communicate.Message;
 import Communicate.OutputServer;
 import Communicate.ServiceNotifier;
 import Gui.GuiUpdate;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.net.Inet4Address;
+import java.net.UnknownHostException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -23,6 +26,7 @@ import java.beans.PropertyChangeListener;
 public class Node {
     
     MessageStorage storage;
+    IPMapper ipMapper;
     
     ServiceNotifier notifier;
     MessageNotifier messageNotifier;
@@ -39,6 +43,7 @@ public class Node {
     public Node(GuiUpdate updater){
         
         storage = new MessageStorage();
+        ipMapper = new IPMapper();
         
         notifier = new ServiceNotifier();
         messageNotifier = new MessageNotifier();
@@ -50,6 +55,8 @@ public class Node {
         inputserver = new InputServer(messageNotifier);
         outputserver = new OutputServer(notifier);
         
+        Node.setSelf("asd");
+        
     }
     
     public MessageStorage getStorage(){
@@ -58,7 +65,13 @@ public class Node {
     
     public static void setSelf(String username){
         
-        self = new Message(username,null, "localhost", Message.TYPE_CONTACT);
+        String selfip = null;
+        try {
+            selfip = Inet4Address.getLocalHost().getHostAddress();
+        } catch (UnknownHostException ex) {
+            Logger.getLogger(Node.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        self = new Message(username,null, selfip, Message.TYPE_CONTACT);
         
     }
     
@@ -75,24 +88,32 @@ public class Node {
                 
                 Message message =(Message) evt.getNewValue();
                 
+                
                 if(message.msgType==Message.TYPE_CONTACT){
                     
                     //message storage
                     Object temp = storage.addUser(message.content);
                     
+                    //create ipmapper entry
+                    ipMapper.storeUsertoIPMapping(message.content,message.from);
+                    
                     //update ui
-                    updater.updateGui(temp);
+                    updater.updateGui(Gui.test.PROP_CONTACT,temp);
                     
                 }else if(message.msgType==Message.TYPE_MESSAGE){
                     
                     //store it in message storege
                     storage.storeUserConversation(message.from, message.content);
+                    
+                    //update ui
+                    updater.updateGui(Gui.test.PROP_MESSAGE,message);
+                    
                 }else if (message.msgType==Message.TYPE_LOGOFF){
                     
                     //logoutsignal
                     
                     Object temp = storage.setOffline(message.content);
-                    updater.updateGui(temp);
+                    updater.updateGui(Gui.test.PROP_CONTACT,temp);
                     
                 }else{
                     
@@ -114,9 +135,18 @@ public class Node {
         
     }
     
+    public void sendMessage(String username,String text){
+        
+        String to = ipMapper.getUserToIPMapping(username);
+        Message message = new Message(text, username, self.content, Message.TYPE_MESSAGE);
+        outputserver.sendMessage(to, message);
+        
+        
+    }
     
     
-    public void shutdown(){
+    
+    public void logoff(){
         
         servicediscovery.shutdown();
         serviceregister.shutdown();

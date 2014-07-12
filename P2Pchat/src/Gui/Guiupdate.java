@@ -17,6 +17,7 @@ public class GuiUpdate implements Serializable {
     
     public static final String PROP_SAMPLE_PROPERTY = "sampleProperty";
     
+    
     private Object sampleProperty;
     
     private PropertyChangeSupport propertySupport;
@@ -30,18 +31,18 @@ public class GuiUpdate implements Serializable {
     }
     
     //change type to message?
-    public void updateGui(Object value) {
+    public void updateGui(String propertyName, Object value) {
         Object oldValue = sampleProperty;
         sampleProperty = value;
-        propertySupport.firePropertyChange(PROP_SAMPLE_PROPERTY, oldValue, sampleProperty);
+        propertySupport.firePropertyChange(propertyName, oldValue, sampleProperty);
     }
     
-    public void addPropertyChangeListener(PropertyChangeListener listener) {
-        propertySupport.addPropertyChangeListener(listener);
+    public void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) {
+        propertySupport.addPropertyChangeListener(propertyName,listener);
     }
     
-    public void removePropertyChangeListener(PropertyChangeListener listener) {
-        propertySupport.removePropertyChangeListener(listener);
+    public void removePropertyChangeListener(String propertyName, PropertyChangeListener listener) {
+        propertySupport.removePropertyChangeListener(propertyName,listener);
     }
     
 }

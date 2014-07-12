@@ -6,6 +6,7 @@
 
 package Communicate;
 
+import Core.Message;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.StaxDriver;
 import io.netty.bootstrap.Bootstrap;
@@ -17,9 +18,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.function.BiConsumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -40,6 +39,7 @@ public class OutputServer extends Thread {
     public OutputServer(ServiceNotifier notifier){
         
         this.notifier = notifier;
+        channelMap = new HashMap<>();
     }
     
     @Override
@@ -62,7 +62,7 @@ public class OutputServer extends Thread {
                
            }
        });
-       
+      
     }
     
     public void initChannel(String ipaddr){
@@ -71,7 +71,8 @@ public class OutputServer extends Thread {
             
             System.out.println("attempting to connect :"+ipaddr);
             Channel ch = b.connect(ipaddr, PORT).sync().channel();
-            channelMap.putIfAbsent(ipaddr, ch);
+            channelMap.put(ipaddr, ch);
+            System.out.println(channelMap.get(ipaddr).localAddress());
             
             
         } catch (InterruptedException ex) {
@@ -84,7 +85,6 @@ public class OutputServer extends Thread {
     public void sendMessage(String ipaddr,Message message){
         
         Channel ch = channelMap.get(ipaddr);
-        
         XStream xs = new XStream(new StaxDriver());
         String xml = xs.toXML(message);
         
@@ -94,10 +94,13 @@ public class OutputServer extends Thread {
     
     public void shutdown(){
         
+        System.out.println("stutting down");
         //get each channels
-        Channel ch = null;
+        List <Channel> channelList = new ArrayList(channelMap.values());
         
-        //send shutdownsignal
+        for(Channel ch : channelList){
+            
+            //send shutdownsignal
         Message logoutmessage = new Message(Core.Node.getSelf().content, null, Core.Node.getSelf().from, Message.TYPE_LOGOFF);
         XStream xs = new XStream(new StaxDriver());
         String xml = xs.toXML(logoutmessage);
@@ -106,6 +109,9 @@ public class OutputServer extends Thread {
         
         //ch.closeFtutre.sync
         ch.close();
+            
+        }
+        
         
         
         group.shutdownGracefully();

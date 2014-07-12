@@ -14,7 +14,7 @@ import javax.swing.DefaultListModel;
  */
 public class MessageStorage {
 
-    HashMap<String, String> history;
+    public HashMap<String, String> history;
     DefaultListModel<String> userList;
 
     public MessageStorage() {
@@ -22,15 +22,17 @@ public class MessageStorage {
         userList = new DefaultListModel<>();
     }
 
-    public String getUserCnversation(String username) {
+    public String getUserConversation(String username) {
 
         String conversation = history.get(username);
         return conversation;
 
     }
 
-    public void storeUserConversation(String usernme, String conversation) {
-        history.putIfAbsent(usernme, conversation);      
+    public void storeUserConversation(String username, String conversation) {
+        String previous = history.get(username);
+        String current = previous+conversation+"\n";
+        history.put(username, current);
     }
     
     public DefaultListModel  addUser(String username){
@@ -44,6 +46,10 @@ public class MessageStorage {
         userList.removeElement(username);
         return userList;
         
+    }
+    
+    public DefaultListModel getUserList(){
+        return userList;
     }
     
     
