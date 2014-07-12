@@ -12,7 +12,6 @@ import Core.Node;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import javax.swing.DefaultListModel;
-import javax.swing.plaf.basic.BasicListUI;
 
 /**
  *
@@ -25,7 +24,7 @@ public class test extends javax.swing.JFrame {
      */
     
     Node node;
-    public GuiUpdate updater;
+    public GuiUpdater updater;
     
     MessageStorage storage;
     
@@ -39,7 +38,7 @@ public class test extends javax.swing.JFrame {
     public test() {
         
         initComponents();
-        updater = new GuiUpdate();
+        updater = new GuiUpdater();
         node = new Node(updater);
         node.init();
         init();

@@ -7,7 +7,6 @@
 package Communicate;
 
 import Core.MessageNotifier;
-import Gui.GuiUpdate;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;

@@ -11,7 +11,7 @@ import Advertise.ServiceRegister;
 import Communicate.InputServer;
 import Communicate.OutputServer;
 import Communicate.ServiceNotifier;
-import Gui.GuiUpdate;
+import Gui.GuiUpdater;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.net.Inet4Address;
@@ -30,7 +30,7 @@ public class Node {
     
     ServiceNotifier notifier;
     MessageNotifier messageNotifier;
-    GuiUpdate updater;
+    GuiUpdater updater;
     
     InputServer inputserver;
     OutputServer outputserver;
@@ -40,7 +40,7 @@ public class Node {
     
     static Message self = new Message("asd", null, "localhost", Message.TYPE_CONTACT);
     
-    public Node(GuiUpdate updater){
+    public Node(GuiUpdater updater){
         
         storage = new MessageStorage();
         ipMapper = new IPMapper();
