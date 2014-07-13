@@ -31,7 +31,6 @@ public class InputServerHandler extends SimpleChannelInboundHandler<String> {
         
         
         // inititate handshake
-        // get self from node
         Message self = Core.Node.getSelf();
         
         XStream xs = new XStream(new StaxDriver());
@@ -75,13 +74,6 @@ public class InputServerHandler extends SimpleChannelInboundHandler<String> {
             notifier.notifyNewMessage(message);
             
         }
-        
-        
-        // add a code for shutdown sequence ?
-        
-        
-        
-        
         
     }
    

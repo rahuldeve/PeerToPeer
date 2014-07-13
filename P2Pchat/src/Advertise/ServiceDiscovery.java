@@ -25,14 +25,13 @@ public class ServiceDiscovery implements Runnable {
     private JmDNS jmdns = null;
     private ServiceListener listener = null;
     private ServiceInfo serviceInfo;
-    boolean old;
+    
     String additions;//use queue later
     ServiceNotifier notifier;
     
 
     public ServiceDiscovery(ServiceNotifier notifier) {
         this.notifier = notifier;
-        old = true;
     }
 
     
@@ -55,18 +54,14 @@ public class ServiceDiscovery implements Runnable {
                         additions = ev.getInfo().getInetAddresses()[0].getHostAddress();
                         System.out.println("Service resolved: " + ev.getInfo().getQualifiedName() + " port:" + ev.getInfo().getPort() + " " + additions);
                         notifier.setSampleProperty(additions);
-                        //somehow pass ipaddr to output server for binding
                     }
                 }
 
                 @Override
                 public void serviceRemoved(ServiceEvent ev) {
                     
-                    //might not be needed
-                    System.out.println("Service removed: " + ev.getName());
-
-                    String ipaddr = ev.getInfo().getInetAddresses()[0].getHostAddress();
-                    //resolver.setOffline(ev.getInfo().getInetAddresses()[0].getHostAddress());
+                    //System.out.println("Service removed: " + ev.getName());
+                    //String ipaddr = ev.getInfo().getInetAddresses()[0].getHostAddress();
                 }
 
                 @Override

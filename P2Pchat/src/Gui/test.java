@@ -40,10 +40,18 @@ public class test extends javax.swing.JFrame {
         initComponents();
         updater = new GuiUpdater();
         node = new Node(updater);
-        node.init();
-        init();
+        
         
         this.storage = node.getStorage();
+        
+        
+        //hide ui components
+        sendButton.setVisible(false);
+        sendText.setVisible(false);
+        messageArea.setVisible(false);
+        contactList.setVisible(false);
+        jScrollPane1.setVisible(false);
+        jScrollPane2.setVisible(false);
         
     }
     
@@ -96,11 +104,10 @@ public class test extends javax.swing.JFrame {
         messageArea = new javax.swing.JTextArea();
         jScrollPane2 = new javax.swing.JScrollPane();
         contactList = new javax.swing.JList();
-        logoutButton = new javax.swing.JButton();
+        loginFeild = new javax.swing.JTextField();
+        loginButton = new javax.swing.JToggleButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        sendText.setText("jTextField1");
 
         sendButton.setText("send");
         sendButton.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -125,10 +132,10 @@ public class test extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(contactList);
 
-        logoutButton.setText("logout");
-        logoutButton.addMouseListener(new java.awt.event.MouseAdapter() {
+        loginButton.setText("Login");
+        loginButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                logoutButtonMouseClicked(evt);
+                loginButtonMouseClicked(evt);
             }
         });
 
@@ -137,31 +144,30 @@ public class test extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(sendText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 259, Short.MAX_VALUE)
-                .addComponent(sendButton))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 307, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 307, Short.MAX_VALUE)
+                    .addComponent(sendText)
+                    .addComponent(loginFeild))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane2)
-                    .addComponent(logoutButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(sendButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(loginButton, javax.swing.GroupLayout.DEFAULT_SIZE, 81, Short.MAX_VALUE)))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(loginFeild, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(loginButton))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 211, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(sendText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(sendButton))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 242, Short.MAX_VALUE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jScrollPane2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(logoutButton))))
+                    .addComponent(sendButton)))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -183,11 +189,6 @@ public class test extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void logoutButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logoutButtonMouseClicked
-        // TODO add your handling code here:
-        node.logoff();
-    }//GEN-LAST:event_logoutButtonMouseClicked
 
     private void sendButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_sendButtonMouseClicked
         // TODO add your handling code here:
@@ -214,6 +215,42 @@ public class test extends javax.swing.JFrame {
         String conversation = storage.getUserConversation(user);
         messageArea.setText(conversation);
     }//GEN-LAST:event_contactListMouseClicked
+
+    private void loginButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_loginButtonMouseClicked
+        // TODO add your handling code here:
+        
+        if(loginButton.isSelected()){
+            
+            //node init
+            node.init();
+            init();
+            
+            //set self
+            Core.Node.setSelf(loginFeild.getText());
+            
+            //change ui
+            sendButton.setVisible(true);
+            sendText.setVisible(true);
+            messageArea.setVisible(true);
+            contactList.setVisible(true);
+            jScrollPane1.setVisible(true);
+            jScrollPane2.setVisible(true);
+            loginButton.setText("Logout");
+            
+        }else{
+            //initiate shutdown
+            node.logoff();
+            
+            //change ui
+            sendButton.setVisible(false);
+            sendText.setVisible(false);
+            messageArea.setVisible(false);
+            contactList.setVisible(false);
+            jScrollPane1.setVisible(false);
+            jScrollPane2.setVisible(false);
+        }
+        
+    }//GEN-LAST:event_loginButtonMouseClicked
 
     /**
      * @param args the command line arguments
@@ -256,7 +293,8 @@ public class test extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JButton logoutButton;
+    private javax.swing.JToggleButton loginButton;
+    private javax.swing.JTextField loginFeild;
     private javax.swing.JTextArea messageArea;
     private javax.swing.JButton sendButton;
     private javax.swing.JTextField sendText;

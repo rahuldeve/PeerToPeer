@@ -2,20 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/C:/Users/rahul%20dev%20e/Documents/GitHub/Valid%20repositories/P2Pchat/src/Communicate/ServiceNotifier.java</file>
-            <file>file:/C:/Users/rahul%20dev%20e/Documents/GitHub/Valid%20repositories/P2Pchat/src/Core/Node.java</file>
-            <file>file:/C:/Users/rahul%20dev%20e/Documents/GitHub/Valid%20repositories/P2Pchat/src/Communicate/OutputServerHandler.java</file>
-            <file>file:/C:/Users/rahul%20dev%20e/Documents/GitHub/Valid%20repositories/P2Pchat/src/Core/MessageNotifier.java</file>
-            <file>file:/C:/Users/rahul%20dev%20e/Documents/GitHub/Valid%20repositories/P2Pchat/src/Communicate/InputServerInitializer.java</file>
-            <file>file:/C:/Users/rahul%20dev%20e/Documents/GitHub/Valid%20repositories/P2Pchat/src/Core/IPMapper.java</file>
-            <file>file:/C:/Users/rahul%20dev%20e/Documents/GitHub/Valid%20repositories/P2Pchat/src/Core/Message.java</file>
-            <file>file:/C:/Users/rahul%20dev%20e/Documents/GitHub/Valid%20repositories/P2Pchat/src/Gui/main.java</file>
-            <file>file:/C:/Users/rahul%20dev%20e/Documents/GitHub/Valid%20repositories/P2Pchat/src/Communicate/OutputServerInitializer.java</file>
-            <file>file:/C:/Users/rahul%20dev%20e/Documents/GitHub/Valid%20repositories/P2Pchat/src/Core/MessageStorage.java</file>
-            <file>file:/C:/Users/rahul%20dev%20e/Documents/GitHub/Valid%20repositories/P2Pchat/src/Gui/test.java</file>
-            <file>file:/C:/Users/rahul%20dev%20e/Documents/GitHub/Valid%20repositories/P2Pchat/src/Gui/GuiUpdater.java</file>
-            <file>file:/C:/Users/rahul%20dev%20e/Documents/GitHub/Valid%20repositories/P2Pchat/src/Communicate/InputServer.java</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>

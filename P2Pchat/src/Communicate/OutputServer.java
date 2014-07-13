@@ -26,7 +26,7 @@ import java.util.logging.Logger;
  *
  * @author rahul dev e
  */
-public class OutputServer extends Thread {
+public class OutputServer implements Runnable {
     
     static final int PORT = 8080;
     

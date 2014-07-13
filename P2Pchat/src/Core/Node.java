@@ -55,7 +55,6 @@ public class Node {
         inputserver = new InputServer(messageNotifier);
         outputserver = new OutputServer(notifier);
         
-        Node.setSelf("asd");
         
     }
     
@@ -129,8 +128,11 @@ public class Node {
         serviceRegistryThread.start();
         serviceDiscoveryThread.start();
         
-        inputserver.start();
-        outputserver.start();
+        Thread inputServerThread = new Thread(inputserver);
+        Thread outputServerThread = new Thread(outputserver);
+        
+        inputServerThread.start();
+        outputServerThread.start();
         
         
     }
@@ -140,7 +142,6 @@ public class Node {
         String to = ipMapper.getUserToIPMapping(username);
         Message message = new Message(text, username, self.content, Message.TYPE_MESSAGE);
         outputserver.sendMessage(to, message);
-        
         
     }
     
@@ -153,7 +154,7 @@ public class Node {
         
         inputserver.shutdown();
         outputserver.shutdown();
-        
+      
     }
      
 }
