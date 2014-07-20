@@ -47,16 +47,18 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
-                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Component id="jScrollPane1" pref="307" max="32767" attributes="0"/>
-                      <Component id="sendText" max="32767" attributes="0"/>
-                      <Component id="loginFeild" max="32767" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="jScrollPane1" pref="307" max="32767" attributes="0"/>
+                          <Component id="sendText" max="32767" attributes="0"/>
+                      </Group>
+                      <Component id="loginFeild" min="-2" pref="315" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="jScrollPane2" max="32767" attributes="0"/>
-                      <Component id="sendButton" alignment="0" max="32767" attributes="0"/>
-                      <Component id="loginButton" alignment="0" pref="81" max="32767" attributes="0"/>
+                      <Component id="sendButton" alignment="0" pref="73" max="32767" attributes="0"/>
+                      <Component id="loginButton" alignment="1" max="32767" attributes="0"/>
                   </Group>
               </Group>
           </Group>
