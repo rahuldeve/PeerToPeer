@@ -62,7 +62,7 @@ public class Node {
         return this.storage;
     }
     
-    public static void setSelf(String username){
+    public static  void setSelf(String username){
         
         String selfip = null;
         try {
@@ -74,7 +74,7 @@ public class Node {
         
     }
     
-    public static Message getSelf(){
+    public static synchronized Message getSelf(){
         return self;
 }
     

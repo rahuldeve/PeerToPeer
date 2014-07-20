@@ -22,7 +22,7 @@ public class OutputServerInitializer extends ChannelInitializer<SocketChannel>{
     
     private static final StringDecoder DECODER = new StringDecoder();
     private static final StringEncoder ENCODER = new StringEncoder();
-
+    
     private static final OutputServerHandler CLIENT_HANDLER = new OutputServerHandler();
 
     @Override
@@ -37,7 +37,7 @@ public class OutputServerInitializer extends ChannelInitializer<SocketChannel>{
         pipeline.addLast(ENCODER);
 
         // and then business logic.
-        pipeline.addLast(CLIENT_HANDLER);
+        pipeline.addLast(new OutputServerHandler());
         
     }
     

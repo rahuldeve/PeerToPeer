@@ -9,6 +9,7 @@ package Communicate;
 import Core.Message;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.StaxDriver;
+import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
@@ -16,6 +17,7 @@ import io.netty.channel.SimpleChannelInboundHandler;
  *
  * @author rahul dev e
  */
+@Sharable
 public class OutputServerHandler extends SimpleChannelInboundHandler<String> {
     
     @Override
